@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Briefcase, Clock, DollarSign } from "lucide-react"
+import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,11 @@ interface JobCardProps {
     salaryMin?: number | null
     salaryMax?: number | null
     createdAt: Date
+    employer?: {
+      averageRating: number
+      isVerified: boolean
+      totalReviews: number
+    }
   }
 }
 
@@ -41,9 +46,23 @@ export function JobCard({ job }: JobCardProps) {
         >
           {job.title}
         </Link>
-        <p className="text-gray-600 dark:text-gray-400 font-medium">
-          {job.company}
-        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-gray-600 dark:text-gray-400 font-medium">
+            {job.company}
+          </p>
+          {job.employer?.isVerified && (
+            <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400">
+              <CheckCircle className="h-3 w-3" />
+              Verified
+            </span>
+          )}
+          {job.employer && job.employer.averageRating > 0 && (
+            <span className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
+              <Star className="h-3 w-3 fill-current" />
+              {job.employer.averageRating.toFixed(1)} ({job.employer.totalReviews})
+            </span>
+          )}
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-3">

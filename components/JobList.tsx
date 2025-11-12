@@ -36,13 +36,39 @@ export async function JobList({ searchParams }: JobListProps) {
     where.salaryMin = { gte: parseInt(minSalary) }
   }
 
+  // Fetch jobs with employer data for ranking
   const jobs = await prisma.job.findMany({
     where,
-    orderBy: { createdAt: "desc" },
-    take: 50,
+    include: {
+      employer: {
+        select: {
+          averageRating: true,
+          responseRate: true,
+          completedHires: true,
+          isVerified: true,
+          totalReviews: true,
+        },
+      },
+    },
+    take: 100, // Fetch more for better ranking
   })
 
-  if (jobs.length === 0) {
+  // Sort by ranking algorithm: employer rating, response rate, completed hires
+  const rankedJobs = jobs
+    .map((job) => {
+      const ratingScore = (job.employer.averageRating || 0) * 20 // 0-100
+      const responseScore = job.employer.responseRate || 0 // 0-100
+      const hireScore = Math.min(job.employer.completedHires * 5, 100) // Cap at 100
+      const verifiedBonus = job.employer.isVerified ? 10 : 0
+      
+      const totalScore = (ratingScore * 0.4) + (responseScore * 0.3) + (hireScore * 0.2) + verifiedBonus
+      
+      return { ...job, rankingScore: totalScore }
+    })
+    .sort((a, b) => b.rankingScore - a.rankingScore)
+    .slice(0, 50) // Take top 50
+
+  if (rankedJobs.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="text-2xl text-gray-400 mb-4">No jobs found</p>
@@ -55,12 +81,15 @@ export async function JobList({ searchParams }: JobListProps) {
     <div>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {jobs.length} {jobs.length === 1 ? "Job" : "Jobs"} Found
+          {rankedJobs.length} {rankedJobs.length === 1 ? "Job" : "Jobs"} Found
         </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Ranked by employer rating, response rate, and verified status
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs.map((job) => (
+        {rankedJobs.map((job) => (
           <JobCard key={job.id} job={job} />
         ))}
       </div>

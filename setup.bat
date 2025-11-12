@@ -55,8 +55,6 @@ echo ✅ Prisma client generated
 :: Push database schema
 echo 🗄️  Pushing database schema...
 echo ⚠️  Make sure your DATABASE_URL in .env is configured correctly
-pause
-
 call npx prisma db push
 
 if %ERRORLEVEL% NEQ 0 (
@@ -76,5 +74,3 @@ echo 2. Run 'npm run dev' to start the development server
 echo 3. Open http://localhost:3000 in your browser
 echo.
 echo 📚 For more information, see README.md
-
-pause

@@ -9,6 +9,7 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: "ApplyNHire - Free Job Portal | Find Jobs & Hire Talent",
   description: "100% Free job portal. Post unlimited jobs. Apply instantly. No fees. Ever. Find your dream job or hire top talent on ApplyNHire.com",
   keywords: ["jobs", "career", "hiring", "recruitment", "free job portal", "job search", "employment"],
@@ -34,11 +35,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body className={`${inter.className} min-h-screen flex flex-col`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           <Header />
