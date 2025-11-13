@@ -64,7 +64,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
       title: job?.title || "",
       company: job?.company || companyName,
       location: job?.location || "",
-      type: job?.type || "full_time",
+      type: (job?.type as JobFormData["type"] | undefined) ?? "full_time",
       description: job?.description || "",
       applyUrl: job?.applyUrl || "",
       salaryMin: job?.salaryMin || undefined,
@@ -78,7 +78,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
         title: job.title,
         company: job.company,
         location: job.location,
-        type: job.type,
+        type: job.type as JobFormData["type"],
         description: job.description,
         applyUrl: job.applyUrl,
         salaryMin: job.salaryMin || undefined,
@@ -176,7 +176,9 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
               <Label htmlFor="type">Employment Type *</Label>
               <Select
                 value={watch("type")}
-                onValueChange={(value) => setValue("type", value as any)}
+                onValueChange={(value) =>
+                  setValue("type", value as JobFormData["type"])
+                }
               >
                 <SelectTrigger>
                   <SelectValue />

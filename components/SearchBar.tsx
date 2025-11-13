@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Search, MapPin, Briefcase, DollarSign } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export function SearchBar() {
+function SearchBarInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -115,5 +115,13 @@ export function SearchBar() {
         </Button>
       </div>
     </div>
+  )
+}
+
+export function SearchBar() {
+  return (
+    <Suspense fallback={<div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 h-32 animate-pulse" />}>
+      <SearchBarInner />
+    </Suspense>
   )
 }

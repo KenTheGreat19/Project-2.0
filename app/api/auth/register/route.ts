@@ -9,6 +9,9 @@ const registerSchema = z.object({
   password: z.string().min(6),
   role: z.enum(["APPLICANT", "EMPLOYER", "ADMIN"]),
   companyName: z.string().optional(),
+  employerType: z.enum(["COMPANY", "AGENCY", "CLIENT"]).optional(),
+  contactEmail: z.string().email().optional().or(z.literal("")),
+  contactPhone: z.string().optional().or(z.literal("")),
 })
 
 export async function POST(request: NextRequest) {
@@ -39,6 +42,11 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         role: data.role,
         companyName: data.companyName,
+        employerType: data.employerType,
+        contactEmail: data.contactEmail,
+        contactPhone: data.contactPhone,
+        // For COMPANY employers, require verification
+        verificationStatus: data.role === "EMPLOYER" && data.employerType === "COMPANY" ? "PENDING" : "NOT_SUBMITTED",
       },
     })
 

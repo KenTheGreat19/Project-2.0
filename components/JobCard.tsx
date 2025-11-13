@@ -1,8 +1,10 @@
 import Link from "next/link"
-import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle } from "lucide-react"
+import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { SaveJobButton } from "@/components/SaveJobButton"
+import { LikeButton } from "@/components/LikeButton"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary, truncateText } from "@/lib/utils"
 
@@ -17,6 +19,9 @@ interface JobCardProps {
     salaryMin?: number | null
     salaryMax?: number | null
     createdAt: Date
+    isSponsored?: boolean
+    likesCount?: number
+    commentsCount?: number
     employer?: {
       averageRating: number
       isVerified: boolean
@@ -38,8 +43,14 @@ export function JobCard({ job }: JobCardProps) {
   const salary = formatSalary(job.salaryMin, job.salaryMax)
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className={`hover:shadow-lg transition-shadow ${job.isSponsored ? 'border-2 border-yellow-400 dark:border-yellow-600' : ''}`}>
       <CardHeader className="pb-3">
+        {job.isSponsored && (
+          <Badge variant="warning" className="w-fit mb-2 gap-1">
+            <Zap className="h-3 w-3" />
+            Sponsored
+          </Badge>
+        )}
         <Link 
           href={`/jobs/${job.id}`}
           className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#0A66C2] dark:hover:text-[#0A66C2] transition-colors"
@@ -95,10 +106,12 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter>
-        <Button asChild className="w-full bg-[#0A66C2] hover:bg-[#0A66C2]/90">
+      <CardFooter className="flex gap-2">
+        <Button asChild className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90">
           <Link href={`/jobs/${job.id}`}>View Details</Link>
         </Button>
+        <LikeButton jobId={job.id} initialLikesCount={job.likesCount || 0} />
+        <SaveJobButton jobId={job.id} variant="outline" />
       </CardFooter>
     </Card>
   )

@@ -13,10 +13,17 @@ const jobSchema = z.object({
   applyUrl: z.string().url("Must be a valid URL"),
   salaryMin: z.number().optional(),
   salaryMax: z.number().optional(),
+  careerLink: z.string().url().optional().or(z.literal("")),
+  contactEmail: z.string().email().optional().or(z.literal("")),
+  contactPhone: z.string().optional().or(z.literal("")),
+  degreeRequired: z.boolean().optional(),
+  degreeType: z.enum(["BACHELORS", "MASTERS", "ASSOCIATES", "HIGH_SCHOOL", "NONE"]).optional(),
+  experienceRequired: z.enum(["ENTRY_LEVEL", "MID_LEVEL", "SENIOR", "MANAGER"]).optional(),
+  yearsOfExperience: z.number().optional(),
 })
 
 // GET - Get all jobs for logged-in employer
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     

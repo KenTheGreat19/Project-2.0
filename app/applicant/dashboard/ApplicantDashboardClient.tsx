@@ -126,11 +126,11 @@ export default function ApplicantDashboardClient({ userName, userEmail }: Applic
                       {application.job.company}
                     </p>
                     <div className="flex flex-wrap gap-2 mb-2">
-                      <Badge variant="outline" className="flex items-center gap-1">
+                      <Badge variant="secondary" className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
                         {application.job.location}
                       </Badge>
-                      <Badge variant="outline">
+                      <Badge variant="default">
                         {application.job.type.replace("_", " ").toUpperCase()}
                       </Badge>
                       <Badge variant="secondary" className="flex items-center gap-1">

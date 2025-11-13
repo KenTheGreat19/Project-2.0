@@ -2,14 +2,24 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, LogOut, LayoutDashboard } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     setMounted(true)
@@ -42,20 +52,64 @@ export function Header() {
             </button>
           )}
 
-          <Button
-            variant="outline"
-            asChild
-            className="border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
-          >
-            <Link href="/auth/employer">For Employers</Link>
-          </Button>
+          {status === "authenticated" ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  {session.user?.name || "Account"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span>{session.user?.name}</span>
+                    <span className="text-xs text-muted-foreground">{session.user?.email}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={
+                      (session.user as any)?.role === "EMPLOYER"
+                        ? "/employer/dashboard"
+                        : (session.user as any)?.role === "ADMIN"
+                        ? "/admin"
+                        : "/applicant/dashboard"
+                    }
+                    className="cursor-pointer"
+                  >
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="cursor-pointer text-red-600"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                asChild
+                className="border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
+              >
+                <Link href="/auth/employer">For Employers</Link>
+              </Button>
 
-          <Button
-            asChild
-            className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
-          >
-            <Link href="/auth/applicant">For Applicants</Link>
-          </Button>
+              <Button
+                asChild
+                className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
+              >
+                <Link href="/auth/applicant">For Applicants</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -94,22 +148,63 @@ export function Header() {
             </button>
           )}
 
-          <Button
-            variant="outline"
-            asChild
-            className="w-full border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <Link href="/auth/employer">For Employers</Link>
-          </Button>
+          {status === "authenticated" ? (
+            <>
+              <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
+                <p className="font-semibold">{session.user?.name}</p>
+                <p className="text-sm text-muted-foreground">{session.user?.email}</p>
+              </div>
+              <Button
+                variant="outline"
+                asChild
+                className="w-full"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Link
+                  href={
+                    (session.user as any)?.role === "EMPLOYER"
+                      ? "/employer/dashboard"
+                      : (session.user as any)?.role === "ADMIN"
+                      ? "/admin"
+                      : "/applicant/dashboard"
+                  }
+                >
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </Button>
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  signOut({ callbackUrl: "/" })
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                asChild
+                className="w-full border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Link href="/auth/employer">For Employers</Link>
+              </Button>
 
-          <Button
-            asChild
-            className="w-full bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <Link href="/auth/applicant">For Applicants</Link>
-          </Button>
+              <Button
+                asChild
+                className="w-full bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Link href="/auth/applicant">For Applicants</Link>
+              </Button>
+            </>
+          )}
         </div>
       )}
     </header>

@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma"
 import { JobCard } from "@/components/JobCard"
+import { AdDisplay } from "@/components/AdDisplay"
 
 interface JobListProps {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -18,14 +19,14 @@ export async function JobList({ searchParams }: JobListProps) {
 
   if (title) {
     where.OR = [
-      { title: { contains: title, mode: "insensitive" } },
-      { company: { contains: title, mode: "insensitive" } },
-      { description: { contains: title, mode: "insensitive" } },
+      { title: { contains: title } },
+      { company: { contains: title } },
+      { description: { contains: title } },
     ]
   }
 
   if (location) {
-    where.location = { contains: location, mode: "insensitive" }
+    where.location = { contains: location }
   }
 
   if (type && type !== "all") {
@@ -47,26 +48,48 @@ export async function JobList({ searchParams }: JobListProps) {
           completedHires: true,
           isVerified: true,
           totalReviews: true,
+          hasVerifiedBadge: true,
         },
       },
     },
     take: 100, // Fetch more for better ranking
   })
 
-  // Sort by ranking algorithm: employer rating, response rate, completed hires
-  const rankedJobs = jobs
+  // Separate sponsored and free jobs
+  const sponsoredJobs = jobs.filter((job) => job.isSponsored && 
+    (!job.impressionLimit || job.impressionsUsed < job.impressionLimit))
+  const freeJobs = jobs.filter((job) => !job.isSponsored || 
+    (job.impressionLimit && job.impressionsUsed >= job.impressionLimit))
+
+  // Sort free jobs by engagement-based ranking algorithm
+  const rankedFreeJobs = freeJobs
     .map((job) => {
+      // Engagement Score: (likes × 2) + (comments × 1)
+      const engagementScore = job.engagementScore || 0
+      
+      // Employer reputation score
       const ratingScore = (job.employer.averageRating || 0) * 20 // 0-100
       const responseScore = job.employer.responseRate || 0 // 0-100
       const hireScore = Math.min(job.employer.completedHires * 5, 100) // Cap at 100
       const verifiedBonus = job.employer.isVerified ? 10 : 0
       
-      const totalScore = (ratingScore * 0.4) + (responseScore * 0.3) + (hireScore * 0.2) + verifiedBonus
+      // Recent post boost (jobs posted in last 7 days get bonus)
+      const daysSincePosted = (Date.now() - new Date(job.createdAt).getTime()) / (1000 * 60 * 60 * 24)
+      const recencyBonus = daysSincePosted <= 7 ? (7 - daysSincePosted) * 5 : 0
+      
+      // Combine: engagement (40%) + employer reputation (40%) + recency (20%)
+      const reputationScore = (ratingScore * 0.4) + (responseScore * 0.3) + (hireScore * 0.2) + verifiedBonus
+      const totalScore = (engagementScore * 0.4) + (reputationScore * 0.4) + recencyBonus
       
       return { ...job, rankingScore: totalScore }
     })
     .sort((a, b) => b.rankingScore - a.rankingScore)
-    .slice(0, 50) // Take top 50
+
+  // Combine: sponsored first, then ranked free jobs
+  const rankedJobs = [
+    ...sponsoredJobs.map(job => ({ ...job, rankingScore: 1000 })), // High score for sponsored
+    ...rankedFreeJobs,
+  ].slice(0, 50) // Take top 50 total
 
   if (rankedJobs.length === 0) {
     return (
@@ -77,6 +100,8 @@ export async function JobList({ searchParams }: JobListProps) {
     )
   }
 
+  const sponsoredCount = sponsoredJobs.length
+
   return (
     <div>
       <div className="mb-6">
@@ -84,13 +109,22 @@ export async function JobList({ searchParams }: JobListProps) {
           {rankedJobs.length} {rankedJobs.length === 1 ? "Job" : "Jobs"} Found
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Ranked by employer rating, response rate, and verified status
+          {sponsoredCount > 0 && `${sponsoredCount} Sponsored • `}
+          Ranked by engagement, employer reputation, and recency
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {rankedJobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+        {rankedJobs.map((job, index) => (
+          <div key={job.id}>
+            <JobCard job={job} />
+            {/* Show inline ad every 6 jobs for guests */}
+            {(index + 1) % 6 === 0 && index !== rankedJobs.length - 1 && (
+              <div className="col-span-full">
+                <AdDisplay position="inline" />
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </div>

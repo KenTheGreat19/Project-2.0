@@ -17,7 +17,7 @@ const jobSchema = z.object({
 
 // GET - Get single job
 export async function GET(
-  request: NextRequest,
+  _: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -87,7 +87,7 @@ export async function PATCH(
 
 // DELETE - Delete job
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

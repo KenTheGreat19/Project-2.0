@@ -4,6 +4,9 @@ import prisma from "@/lib/prisma"
 import { ApplyButton } from "@/components/ApplyButton"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { PublicComments } from "@/components/PublicComments"
+import { EmployerPublicReviews } from "@/components/EmployerPublicReviews"
+import { JobLocationMap } from "@/components/JobLocationMap"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary } from "@/lib/utils"
 
@@ -38,6 +41,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
     include: {
       employer: {
         select: {
+          id: true,
           name: true,
           companyName: true,
         },
@@ -117,10 +121,28 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                 </div>
               </CardContent>
             </Card>
+
+            {/* Public Comments */}
+            <PublicComments jobId={job.id} />
+
+            {/* Employer Reviews */}
+            <EmployerPublicReviews 
+              employerId={job.employer.id} 
+              companyName={job.company}
+            />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Job Location Map */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Job Location</h3>
+              <JobLocationMap 
+                location={job.location}
+                jobTitle={job.title}
+                company={job.company}
+              />
+            </div>
             {/* Apply Button Card */}
             <Card>
               <CardContent className="pt-6">

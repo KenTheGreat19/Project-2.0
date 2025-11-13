@@ -8,95 +8,163 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String
-  password    String?
-  role        String   @default("APPLICANT")
-  companyName String?
-  image       String?
-  bio         String?
-  phone       String?
-  location    String?
-  website     String?
+  id                  String   @id @default(cuid())
+  email               String   @unique
+  name                String
+  password            String?
+  role                String   @default("APPLICANT")
+  image               String?
+  bio                 String?
+  phone               String?
+  location            String?
+  website             String?
+  companyName         String?
+  employerType        String?  // "COMPANY", "AGENCY", "CLIENT"
+  contactEmail        String?
+  contactPhone        String?
+  contactWebsite      String?
   
-  // Rating fields
-  averageRating     Float @default(0)
-  totalReviews      Int   @default(0)
-  completedHires    Int   @default(0)
-  responseRate      Float @default(0)
-  isVerified        Boolean @default(false)
+  // Applicant-specific fields
+  education           String?
+  experienceLevel     String?  // "entry", "mid", "senior", "executive"
+  skills              String?
+  resume              String?
   
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Employer balance wallet
+  adBalance           Float    @default(0)  // $1 = 1000 impressions
+  
+  // Subscription fields
+  hasVerifiedBadge    Boolean  @default(false)
+  verifiedBadgeExpiry DateTime?
+  hasUnlimitedSponsored Boolean @default(false)
+  unlimitedSponsoredExpiry DateTime?
+  
+  isVerified          Boolean  @default(false)
+  verificationStatus  String   @default("NOT_SUBMITTED")
+  
+  averageRating       Float    @default(0)
+  totalReviews        Int      @default(0)
+  completedHires      Int      @default(0)
+  responseRate        Float    @default(0)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   jobs                Job[]
   applications        Application[]
-  givenReviews        Review[]        @relation("ReviewGiver")
-  receivedReviews     Review[]        @relation("ReviewReceiver")
+  givenReviews        Review[]                @relation("ReviewGiver")
+  receivedReviews     Review[]                @relation("ReviewReceiver")
+  verificationDocs    VerificationDocument[]
   badges              UserBadge[]
   notifications       Notification[]
+  publicComments      PublicComment[]
+  employerReviewsReceived EmployerReview[] @relation("EmployerReviews")
+  employerReviewsGiven    EmployerReview[] @relation("GivenEmployerReviews")
+  savedJobs           SavedJob[]
+  balanceTransactions BalanceTransaction[]
+  jobImpressions      JobImpression[]
+  subscriptions       Subscription[]
+  jobLikes            JobLike[]
 
   @@index([email])
   @@index([role])
+  @@index([verificationStatus])
   @@index([averageRating])
+  @@index([createdAt])
 }
 
 model Job {
-  id          String   @id @default(cuid())
-  title       String
-  company     String
-  location    String
-  type        String
-  description String
-  applyUrl    String
-  status      String   @default("pending")
-  salaryMin   Int?
-  salaryMax   Int?
-  employerId  String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id                  String   @id @default(cuid())
+  title               String
+  company             String
+  location            String
+  type                String
+  description         String
+  applyUrl            String
+  status              String   @default("pending")
+  
+  salaryMin           Int?
+  salaryMax           Int?
+  currency            String   @default("USD")
+  
+  degreeRequired      Boolean  @default(false)
+  degreeType          String?
+  experienceRequired  String?
+  yearsOfExperience   Int?
+  
+  careerLink          String?
+  contactEmail        String?
+  contactPhone        String?
+  
+  // Sponsored job fields
+  isSponsored         Boolean  @default(false)
+  sponsoredUntil      DateTime?
+  impressionLimit     Int?     // Total impressions purchased
+  impressionsUsed     Int      @default(0)
+  costPerImpression   Float    @default(0.001)  // $1 per 1000 impressions
+  
+  // Targeting filters for sponsored jobs
+  targetLocation      String?
+  targetExperience    String?  // "entry", "mid", "senior", "executive"
+  targetEducation     String?  // "high_school", "bachelor", "master", "phd"
+  
+  // Engagement metrics
+  likesCount          Int      @default(0)
+  commentsCount       Int      @default(0)
+  viewsCount          Int      @default(0)
+  engagementScore     Float    @default(0)  // Calculated: (likes × 2) + (comments × 1)
+  
+  employerId          String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  employer     User          @relation(fields: [employerId], references: [id], onDelete: Cascade)
-  applications Application[]
+  employer            User     @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  applications        Application[]
+  publicComments      PublicComment[]
+  savedBy             SavedJob[]
+  impressions         JobImpression[]
+  likes               JobLike[]
 
   @@index([employerId])
   @@index([status])
   @@index([type])
+  @@index([location])
   @@index([createdAt])
+  @@index([experienceRequired])
+  @@index([isSponsored])
+  @@index([sponsoredUntil])
 }
 
 model Application {
-  id          String   @id @default(cuid())
-  jobId       String
-  applicantId String
-  status      String   @default("pending") // pending, reviewing, hired, rejected
-  appliedAt   DateTime @default(now())
-  hiredAt     DateTime?
+  id                  String   @id @default(cuid())
+  jobId               String
+  applicantId         String
+  status              String   @default("pending")
+  appliedAt           DateTime @default(now())
+  hiredAt             DateTime?
   
-  // Review tracking
-  employerReviewed  Boolean @default(false)
-  applicantReviewed Boolean @default(false)
-  reviewReminderSent Boolean @default(false)
+  employerReviewed    Boolean  @default(false)
+  applicantReviewed   Boolean  @default(false)
+  reviewReminderSent  Boolean  @default(false)
 
-  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  applicant User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  reviews   Review[]
+  job                 Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applicant           User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  reviews             Review[]
 
   @@unique([jobId, applicantId])
   @@index([applicantId])
   @@index([jobId])
   @@index([status])
+  @@index([appliedAt])
 }
 
 model Review {
-  id            String   @id @default(cuid())
-  applicationId String
-  reviewerId    String
-  revieweeId    String
-  reviewType    String   // "employer_review" or "applicant_review"
+  id                  String   @id @default(cuid())
+  applicationId       String
+  reviewerId          String
+  revieweeId          String
+  reviewType          String
   
-  // Rating categories (1-5 stars)
   overallRating       Int
   communication       Int?
   professionalism     Int?
@@ -106,67 +174,207 @@ model Review {
   workEnvironment     Int?
   paymentTimeliness   Int?
   
-  comment       String?
-  isVisible     Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  comment             String?
+  isVisible           Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  reviewer    User        @relation("ReviewGiver", fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewee    User        @relation("ReviewReceiver", fields: [revieweeId], references: [id], onDelete: Cascade)
+  application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewer            User     @relation("ReviewGiver", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee            User     @relation("ReviewReceiver", fields: [revieweeId], references: [id], onDelete: Cascade)
 
   @@index([revieweeId])
+  @@index([reviewerId])
+  @@index([applicationId])
   @@index([reviewType])
+  @@index([isVisible])
   @@index([createdAt])
 }
 
 model Badge {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  description String
-  icon        String
-  type        String   // "employer" or "applicant"
+  id                  String   @id @default(cuid())
+  name                String   @unique
+  description         String
+  icon                String
+  type                String
   
-  // Requirements
-  minRating       Float?
-  minReviews      Int?
-  minCompletedHires Int?
+  minRating           Float?
+  minReviews          Int?
+  minCompletedHires   Int?
   requiresVerification Boolean @default(false)
   
-  createdAt   DateTime @default(now())
+  createdAt           DateTime @default(now())
 
-  userBadges  UserBadge[]
+  userBadges          UserBadge[]
 
   @@index([type])
 }
 
 model UserBadge {
-  id        String   @id @default(cuid())
-  userId    String
-  badgeId   String
-  earnedAt  DateTime @default(now())
+  id                  String   @id @default(cuid())
+  userId              String
+  badgeId             String
+  earnedAt            DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge               Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, badgeId])
   @@index([userId])
+  @@index([badgeId])
+}
+
+model VerificationDocument {
+  id                  String   @id @default(cuid())
+  userId              String
+  documentType        String
+  documentUrl         String
+  submittedAt         DateTime @default(now())
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PublicComment {
+  id                  String   @id @default(cuid())
+  jobId               String
+  authorId            String
+  title               String?
+  comment             String
+  rating              Int?
+  isVisible           Boolean  @default(true)
+  isAnonymous         Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  job                 Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  author              User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([authorId])
+  @@index([isVisible])
+  @@index([createdAt])
+}
+
+model EmployerReview {
+  id                  String   @id @default(cuid())
+  employerId          String
+  reviewerId          String
+  rating              Int
+  comment             String
+  isAnonymous         Boolean  @default(false)
+  isVisible           Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  employer            User     @relation("EmployerReviews", fields: [employerId], references: [id], onDelete: Cascade)
+  reviewer            User     @relation("GivenEmployerReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@index([employerId])
+  @@index([reviewerId])
+  @@index([isVisible])
+  @@index([createdAt])
 }
 
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  type      String   // "review_reminder", "review_received", "badge_earned"
-  title     String
-  message   String
-  link      String?
-  read      Boolean  @default(false)
-  emailSent Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id                  String   @id @default(cuid())
+  userId              String
+  type                String
+  title               String
+  message             String
+  link                String?
+  read                Boolean  @default(false)
+  emailSent           Boolean  @default(false)
+  createdAt           DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([read])
   @@index([createdAt])
+}
+
+model SavedJob {
+  id                  String   @id @default(cuid())
+  userId              String
+  jobId               String
+  createdAt           DateTime @default(now())
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job                 Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+}
+
+model BalanceTransaction {
+  id                  String   @id @default(cuid())
+  userId              String
+  amount              Float
+  type                String   // "topup", "deduction", "refund"
+  description         String
+  balanceBefore       Float
+  balanceAfter        Float
+  relatedJobId        String?
+  createdAt           DateTime @default(now())
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model JobImpression {
+  id                  String   @id @default(cuid())
+  jobId               String
+  userId              String?  // null for guest views
+  ipAddress           String?
+  userAgent           String?
+  isTargeted          Boolean  @default(false)  // Whether impression matched targeting
+  createdAt           DateTime @default(now())
+
+  job                 Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user                User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([jobId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([ipAddress])
+}
+
+model Subscription {
+  id                  String   @id @default(cuid())
+  userId              String
+  type                String   // "VERIFIED_BADGE", "UNLIMITED_SPONSORED"
+  status              String   @default("active")  // "active", "cancelled", "expired"
+  startDate           DateTime @default(now())
+  endDate             DateTime
+  price               Float
+  autoRenew           Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([endDate])
+}
+
+model JobLike {
+  id                  String   @id @default(cuid())
+  jobId               String
+  userId              String
+  createdAt           DateTime @default(now())
+
+  job                 Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+  @@index([jobId])
+  @@index([userId])
 }

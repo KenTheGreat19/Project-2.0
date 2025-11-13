@@ -85,7 +85,7 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
       cell: ({ row }) => {
         const type = row.getValue("type") as string
         return (
-          <Badge variant="outline">
+          <Badge variant="secondary">
             {type.replace("_", " ").toUpperCase()}
           </Badge>
         )
@@ -218,7 +218,7 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.context
+                            header.getContext()
                           )}
                     </TableHead>
                   )
@@ -237,7 +237,7 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.context
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

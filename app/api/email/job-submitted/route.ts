@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +22,10 @@ export async function POST(request: NextRequest) {
     }
 
     const adminEmail = process.env.ADMIN_EMAIL || "admin@applynhire.com"
+
+    if (!resend) {
+      return NextResponse.json({ error: "Email service not configured" }, { status: 503 })
+    }
 
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "ApplyNHire <noreply@applynhire.com>",

@@ -133,7 +133,6 @@ export async function POST(req: NextRequest) {
 
     // Verify user is authorized to review
     const userId = (session.user as any).id
-    const userRole = (session.user as any).role
 
     if (reviewType === "employer_review" && userId !== application.applicantId) {
       return NextResponse.json({ error: "Only the applicant can review the employer" }, { status: 403 })

@@ -4,8 +4,8 @@ import { authOptions } from "@/lib/auth"
 import AdminDashboardClient from "./AdminDashboardClient"
 
 export const metadata = {
-  title: "Admin Portal - ApplyNHire",
-  description: "Manage all job postings",
+  title: "Admin Dashboard - ApplyNHire",
+  description: "Analytics and job management",
 }
 
 export default async function AdminDashboard() {
@@ -18,16 +18,20 @@ export default async function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            Admin Portal
-          </h1>
-          <p className="text-muted-foreground">
-            Manage job postings and platform statistics
-          </p>
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Admin Dashboard
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Monitor platform analytics and manage job postings
+            </p>
+          </div>
         </div>
 
+        {/* Main Dashboard with Analytics */}
         <AdminDashboardClient />
       </div>
     </div>

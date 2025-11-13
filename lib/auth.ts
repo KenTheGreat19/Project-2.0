@@ -55,9 +55,20 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id
-        (session.user as any).role = token.role
-        (session.user as any).companyName = token.companyName
+        const mutableUser = session.user as Record<string, unknown>
+        const tokenData = token as Record<string, unknown>
+
+        if (typeof tokenData.id !== "undefined") {
+          mutableUser.id = tokenData.id
+        }
+
+        if (typeof tokenData.role !== "undefined") {
+          mutableUser.role = tokenData.role
+        }
+
+        if (typeof tokenData.companyName !== "undefined") {
+          mutableUser.companyName = tokenData.companyName
+        }
       }
       return session
     },

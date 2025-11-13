@@ -18,6 +18,11 @@ const employerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   companyName: z.string().min(2, "Company name is required"),
+  employerType: z.enum(["COMPANY", "AGENCY", "CLIENT"], {
+    errorMap: () => ({ message: "Please select an employer type" }),
+  }),
+  contactPhone: z.string().optional(),
+  contactEmail: z.string().email().optional().or(z.literal("")),
   password: z.string().min(6, "Password must be at least 6 characters"),
 })
 
@@ -189,6 +194,24 @@ export default function EmployerAuthPage() {
               </div>
 
               <div>
+                <Label htmlFor="employerType">Employer Type *</Label>
+                <select
+                  id="employerType"
+                  {...registerSignup("employerType")}
+                  disabled={isLoading}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 dark:text-white"
+                >
+                  <option value="">Select type...</option>
+                  <option value="COMPANY">Company (Requires verification)</option>
+                  <option value="AGENCY">Recruitment Agency (Optional verification)</option>
+                  <option value="CLIENT">Client/Direct Hire (Optional verification)</option>
+                </select>
+                {signupErrors.employerType && (
+                  <p className="text-sm text-red-500 mt-1">{signupErrors.employerType.message}</p>
+                )}
+              </div>
+
+              <div>
                 <Label htmlFor="signup-email">Email</Label>
                 <Input
                   id="signup-email"
@@ -199,6 +222,28 @@ export default function EmployerAuthPage() {
                 {signupErrors.email && (
                   <p className="text-sm text-red-500 mt-1">{signupErrors.email.message}</p>
                 )}
+              </div>
+
+              <div>
+                <Label htmlFor="contactEmail">Public Contact Email (Optional)</Label>
+                <Input
+                  id="contactEmail"
+                  type="email"
+                  placeholder="your-company@example.com"
+                  {...registerSignup("contactEmail")}
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="contactPhone">Public Contact Phone (Optional)</Label>
+                <Input
+                  id="contactPhone"
+                  type="tel"
+                  placeholder="+1 (555) 123-4567"
+                  {...registerSignup("contactPhone")}
+                  disabled={isLoading}
+                />
               </div>
 
               <div>

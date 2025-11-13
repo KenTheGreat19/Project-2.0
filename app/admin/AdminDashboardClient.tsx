@@ -31,7 +31,7 @@ import {
   ExternalLink,
   Trash2,
   Edit,
-  ArrowUpDown
+  BarChart3
 } from "lucide-react"
 import { Job } from "@prisma/client"
 import { toast } from "sonner"
@@ -56,6 +56,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { StatsCards } from "@/components/admin/StatsCards"
+import { AnalyticsCharts } from "@/components/admin/AnalyticsCharts"
+import { VisitorMap } from "@/components/admin/VisitorMap"
 
 type JobWithEmployer = Job & {
   employer: {
@@ -75,15 +78,42 @@ interface Stats {
   rejectedJobs: number
   totalEmployers: number
   totalApplicants: number
+  totalUsers: number
+  totalRevenue: number
+  totalViews: number
+  totalLikes: number
+  jobsChange: number
+  usersChange: number
+  revenueChange: number
+  viewsChange: number
+  likesChange: number
+}
+
+interface MonthlyData {
+  month: string
+  jobs: number
+  applications: number
+  views: number
+}
+
+interface VisitorData {
+  country: string
+  countryCode: string
+  visitors: number
+  percentage: number
+  color: string
 }
 
 export default function AdminDashboardClient() {
   const [stats, setStats] = React.useState<Stats | null>(null)
+  const [monthlyData, setMonthlyData] = React.useState<MonthlyData[]>([])
+  const [visitorData, setVisitorData] = React.useState<VisitorData[]>([])
   const [jobs, setJobs] = React.useState<JobWithEmployer[]>([])
   const [filteredJobs, setFilteredJobs] = React.useState<JobWithEmployer[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState<string>("all")
+  const [showAnalytics, setShowAnalytics] = React.useState(true)
   
   // Dialogs
   const [selectedJob, setSelectedJob] = React.useState<Job | null>(null)
@@ -129,7 +159,9 @@ export default function AdminDashboardClient() {
       const statsData = await statsRes.json()
       const jobsData = await jobsRes.json()
 
-      setStats(statsData)
+      setStats(statsData.stats)
+      setMonthlyData(statsData.monthlyData)
+      setVisitorData(statsData.visitorData)
       setJobs(jobsData)
       setFilteredJobs(jobsData)
     } catch (error) {
@@ -242,71 +274,108 @@ export default function AdminDashboardClient() {
 
   return (
     <>
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-6 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Jobs</CardTitle>
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalJobs || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.pendingJobs || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.approvedJobs || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rejected</CardTitle>
-            <XCircle className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.rejectedJobs || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Employers</CardTitle>
-            <Users className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalEmployers || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Applicants</CardTitle>
-            <UserCheck className="h-4 w-4 text-purple-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalApplicants || 0}</div>
-          </CardContent>
-        </Card>
+      {/* View Toggle */}
+      <div className="flex justify-between items-center mb-6">
+        <Button
+          variant={showAnalytics ? "default" : "outline"}
+          onClick={() => setShowAnalytics(true)}
+          className="gap-2"
+        >
+          <BarChart3 className="h-4 w-4" />
+          Analytics Dashboard
+        </Button>
+        <Button
+          variant={!showAnalytics ? "default" : "outline"}
+          onClick={() => setShowAnalytics(false)}
+          className="gap-2"
+        >
+          <Briefcase className="h-4 w-4" />
+          Job Management
+        </Button>
       </div>
 
-      {/* Jobs Table */}
-      <Card>
+      {/* Analytics View */}
+      {showAnalytics && stats && (
+        <div className="space-y-6">
+          {/* Stats Cards */}
+          <StatsCards stats={stats} />
+
+          {/* Visitor Map */}
+          <VisitorMap visitorData={visitorData} />
+
+          {/* Analytics Charts */}
+          <AnalyticsCharts monthlyData={monthlyData} />
+        </div>
+      )}
+
+      {/* Job Management View */}
+      {!showAnalytics && (
+        <>
+          {/* Quick Stats Summary */}
+          <div className="grid gap-4 md:grid-cols-6 mb-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Jobs</CardTitle>
+                <Briefcase className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.totalJobs || 0}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                <Clock className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.pendingJobs || 0}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Approved</CardTitle>
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.approvedJobs || 0}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+                <XCircle className="h-4 w-4 text-red-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.rejectedJobs || 0}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Employers</CardTitle>
+                <Users className="h-4 w-4 text-blue-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.totalEmployers || 0}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Applicants</CardTitle>
+                <UserCheck className="h-4 w-4 text-purple-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats?.totalApplicants || 0}</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Jobs Table */}
+          <Card>
         <CardHeader>
           <CardTitle>All Job Postings</CardTitle>
           <CardDescription>Manage and review all job postings on the platform</CardDescription>
@@ -372,7 +441,7 @@ export default function AdminDashboardClient() {
                       </TableCell>
                       <TableCell>{job.location}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">
+                        <Badge variant="secondary">
                           {job.type.replace("_", " ").toUpperCase()}
                         </Badge>
                       </TableCell>
@@ -458,6 +527,8 @@ export default function AdminDashboardClient() {
           </div>
         </CardContent>
       </Card>
+        </>
+      )}
 
       {/* Edit Job Dialog */}
       <JobFormDialog
