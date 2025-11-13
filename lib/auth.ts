@@ -9,33 +9,48 @@ import prisma from "@/lib/prisma"
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
-    AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID || "",
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET || "",
-      tenantId: process.env.AZURE_AD_TENANT_ID || "common",
-    }),
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
+    ...(process.env.AZURE_AD_CLIENT_ID && process.env.AZURE_AD_CLIENT_SECRET
+      ? [
+          AzureADProvider({
+            clientId: process.env.AZURE_AD_CLIENT_ID,
+            clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+            tenantId: process.env.AZURE_AD_TENANT_ID || "common",
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
     // Yahoo OAuth provider configuration
-    {
-      id: "yahoo",
-      name: "Yahoo",
-      type: "oauth" as const,
-      wellKnown: "https://api.login.yahoo.com/.well-known/openid-configuration",
-      authorization: { params: { scope: "openid email profile" } },
-      clientId: process.env.YAHOO_CLIENT_ID || "",
-      clientSecret: process.env.YAHOO_CLIENT_SECRET || "",
-      profile(profile: any) {
-        return {
-          id: profile.sub,
-          name: profile.name || profile.nickname,
-          email: profile.email,
-          image: profile.picture,
-        }
-      },
-    },
+    ...(process.env.YAHOO_CLIENT_ID && process.env.YAHOO_CLIENT_SECRET
+      ? [
+          {
+            id: "yahoo",
+            name: "Yahoo",
+            type: "oauth" as const,
+            wellKnown: "https://api.login.yahoo.com/.well-known/openid-configuration",
+            authorization: { params: { scope: "openid email profile" } },
+            clientId: process.env.YAHOO_CLIENT_ID,
+            clientSecret: process.env.YAHOO_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true,
+            profile(profile: any) {
+              return {
+                id: profile.sub,
+                name: profile.name || profile.nickname,
+                email: profile.email,
+                image: profile.picture,
+              }
+            },
+          },
+        ]
+      : []),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -43,58 +58,114 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials")
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.error("Missing credentials")
+            return null
+          }
+
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email.toLowerCase().trim() },
+          })
+
+          if (!user || !user.password) {
+            console.error("User not found or no password set")
+            return null
+          }
+
+          const isCorrectPassword = await bcrypt.compare(
+            credentials.password,
+            user.password
+          )
+
+          if (!isCorrectPassword) {
+            console.error("Invalid password")
+            return null
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image,
+          }
+        } catch (error) {
+          console.error("Authorization error:", error)
+          return null
         }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        })
-
-        if (!user || !user.password) {
-          throw new Error("Invalid credentials")
-        }
-
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
-
-        if (!isCorrectPassword) {
-          throw new Error("Invalid credentials")
-        }
-
-        return user
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async signIn({ user, account, profile }) {
+      try {
+        // For OAuth providers, ensure user exists in database
+        if (account?.provider !== "credentials" && user.email) {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email },
+          })
+
+          if (!existingUser && profile) {
+            // Create user if doesn't exist
+            await prisma.user.create({
+              data: {
+                email: user.email,
+                name: user.name || profile.name || "User",
+                image: user.image || (profile as any)?.picture,
+                role: "APPLICANT", // Default role
+              },
+            })
+          }
+        }
+        return true
+      } catch (error) {
+        console.error("Sign in error:", error)
+        return false
+      }
+    },
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session) {
+        return { ...token, ...session.user }
+      }
+      
       if (user) {
         token.id = user.id
-        token.role = (user as any).role
+        token.role = (user as any).role || "APPLICANT"
         token.companyName = (user as any).companyName
       }
+      
+      // Fetch fresh user data to ensure role is up to date
+      if (token.email) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: token.email },
+            select: { id: true, role: true, companyName: true, name: true, image: true },
+          })
+          
+          if (dbUser) {
+            token.id = dbUser.id
+            token.role = dbUser.role
+            token.companyName = dbUser.companyName
+            token.name = dbUser.name
+            token.picture = dbUser.image
+          }
+        } catch (error) {
+          console.error("Error fetching user in JWT callback:", error)
+        }
+      }
+      
       return token
     },
     async session({ session, token }) {
       if (session.user) {
-        const mutableUser = session.user as Record<string, unknown>
-        const tokenData = token as Record<string, unknown>
-
-        if (typeof tokenData.id !== "undefined") {
-          mutableUser.id = tokenData.id
-        }
-
-        if (typeof tokenData.role !== "undefined") {
-          mutableUser.role = tokenData.role
-        }
-
-        if (typeof tokenData.companyName !== "undefined") {
-          mutableUser.companyName = tokenData.companyName
-        }
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role || "APPLICANT";
+        (session.user as any).companyName = token.companyName;
+        session.user.name = token.name as string;
+        session.user.image = token.picture as string;
       }
-      return session
+      return session;
     },
   },
   pages: {

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Loader2, Navigation } from "lucide-react"
 
+const libraries: ("places")[] = ["places"]
+
 const mapContainerStyle = {
   width: "100%",
   height: "500px",
@@ -43,6 +45,7 @@ export function GoogleJobMap({ jobs, onJobClick }: GoogleJobMapProps) {
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries,
   })
 
   // Filter jobs that have valid coordinates

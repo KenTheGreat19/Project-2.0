@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card"
 import { Loader2, MapPin } from "lucide-react"
 import { useState, useEffect } from "react"
 
+const libraries: ("places")[] = ["places"]
+
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -33,7 +35,7 @@ export function GoogleJobLocationMap({
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["places"],
+    libraries,
   })
 
   // If no coordinates provided, try to geocode the location string

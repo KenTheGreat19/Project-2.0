@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap } from "lucide-react"
+import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap, TrendingUp } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -28,9 +28,10 @@ interface JobCardProps {
       totalReviews: number
     }
   }
+  showTrendingBadge?: boolean
 }
 
-export function JobCard({ job }: JobCardProps) {
+export function JobCard({ job, showTrendingBadge }: JobCardProps) {
   const employmentTypeLabels: Record<string, string> = {
     full_time: "Full Time",
     part_time: "Part Time",
@@ -45,12 +46,21 @@ export function JobCard({ job }: JobCardProps) {
   return (
     <Card className={`hover:shadow-lg transition-shadow ${job.isSponsored ? 'border-2 border-yellow-400 dark:border-yellow-600' : ''}`}>
       <CardHeader className="pb-3">
-        {job.isSponsored && (
-          <Badge variant="warning" className="w-fit mb-2 gap-1">
-            <Zap className="h-3 w-3" />
-            Sponsored
-          </Badge>
-        )}
+        <div className="flex gap-2 flex-wrap">
+          {job.isSponsored && (
+            <Badge variant="warning" className="w-fit gap-1">
+              <Zap className="h-3 w-3" />
+              Sponsored
+            </Badge>
+          )}
+          {showTrendingBadge && (
+            <Badge variant="secondary" className="w-fit gap-1 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300">
+              <TrendingUp className="h-3 w-3" />
+              Trending
+            </Badge>
+          )}
+        </div>
+        {(job.isSponsored || showTrendingBadge) && <div className="h-2" />}
         <Link 
           href={`/jobs/${job.id}`}
           className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#0A66C2] dark:hover:text-[#0A66C2] transition-colors"

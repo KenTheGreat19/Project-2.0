@@ -4,6 +4,8 @@ import { JobList } from "@/components/JobList"
 import { JobListSkeleton } from "@/components/JobCardSkeleton"
 import { AdDisplay } from "@/components/AdDisplay"
 import { JobMapSection } from "@/components/JobMapSection"
+import { TrendingJobs } from "@/components/TrendingJobs"
+import { JobCategories } from "@/components/JobCategories"
 
 export default function HomePage({
   searchParams,
@@ -40,10 +42,22 @@ export default function HomePage({
       </section>
 
       {/* Job Listings Section */}
-      <section className="container mx-auto px-4 pb-16">
+      <section className="container mx-auto px-4 pb-8">
         <Suspense fallback={<JobListSkeleton />}>
           <JobList searchParams={searchParams} />
         </Suspense>
+      </section>
+
+      {/* Trending Jobs Section */}
+      <section className="container mx-auto px-4 py-12 bg-gray-50 dark:bg-gray-900">
+        <Suspense fallback={<JobListSkeleton />}>
+          <TrendingJobs />
+        </Suspense>
+      </section>
+
+      {/* Job Categories Section */}
+      <section className="container mx-auto px-4 py-12">
+        <JobCategories />
       </section>
     </div>
   )

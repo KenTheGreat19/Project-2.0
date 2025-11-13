@@ -138,7 +138,7 @@ export default function NewUserPage() {
                 </ul>
               </CardContent>
             </Card>
-          </div>
+          </form>
         </div>
       </div>
     </div>

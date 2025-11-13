@@ -47,6 +47,15 @@ model User {
   completedHires      Int      @default(0)
   responseRate        Float    @default(0)
   
+  // Admin 2FA fields
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean  @default(false)
+  lastLoginAt         DateTime?
+  lastLoginIp         String?
+  loginAttempts       Int      @default(0)
+  lockedUntil         DateTime?
+  adminSecurityKey    String?
+  
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -81,6 +90,7 @@ model Job {
   locationLat         Float?
   locationLng         Float?
   type                String
+  category            String?  // Job category like "Technology", "Healthcare", etc.
   description         String
   applyUrl            String
   acceptApplicationsHere Boolean @default(false)

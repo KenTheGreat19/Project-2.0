@@ -1,0 +1,417 @@
+import { cookies } from 'next/headers';
+import { prisma } from '@/lib/prisma';
+
+/**
+ * Verifies an admin session from the request
+ * @param request - The incoming request object
+ * @returns The admin user object if valid, null otherwise
+ */
+export async function verifyAdminSession(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get('admin_session');
+
+    if (!sessionCookie) {
+      return null;
+    }
+
+    // Decode session token
+    const sessionData = JSON.parse(
+      Buffer.from(sessionCookie.value, 'base64').toString('utf-8')
+    );
+
+    // Verify session is not expired (8 hours)
+    const sessionAge = Date.now() - sessionData.timestamp;
+    if (sessionAge > 8 * 60 * 60 * 1000) {
+      return null;
+    }
+
+    // Get admin user
+    const admin = await prisma.user.findFirst({
+      where: {
+        id: sessionData.id,
+        email: sessionData.email,
+        role: 'ADMIN',
+      },
+    });
+
+    return admin;
+  } catch (error) {
+    console.error('Session verification error:', error);
+    return null;
+  }
+}
+
+// Legacy function - kept for backward compatibility
+export async function verifyAdminCredentials(
+  email: string,
+  password: string
+): Promise<AdminAuthResult> {
+  try {
+    // Rate limiting check
+    if (email !== ADMIN_EMAIL) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+      }
+    }
+
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        twoFactorEnabled: true,
+        twoFactorSecret: true,
+        loginAttempts: true,
+        lockedUntil: true,
+      },
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+      }
+    }
+
+    // Check if account is locked
+    if (admin.lockedUntil && admin.lockedUntil > new Date()) {
+      const minutesLeft = Math.ceil(
+        (admin.lockedUntil.getTime() - Date.now()) / 60000
+      )
+      return {
+        success: false,
+        message: `Account is locked. Try again in ${minutesLeft} minutes.`,
+      }
+    }
+
+    // Reset login attempts if lock time has passed
+    if (admin.lockedUntil && admin.lockedUntil <= new Date()) {
+      await prisma.user.update({
+        where: { id: admin.id },
+        data: {
+          loginAttempts: 0,
+          lockedUntil: null,
+        },
+      })
+    }
+
+    // Verify password
+    const passwordMatch = await bcrypt.compare(password, admin.password || "")
+
+    if (!passwordMatch) {
+      // Increment failed login attempts
+      const newAttempts = admin.loginAttempts + 1
+      const updates: any = { loginAttempts: newAttempts }
+
+      if (newAttempts >= MAX_LOGIN_ATTEMPTS) {
+        updates.lockedUntil = new Date(Date.now() + LOCK_TIME)
+      }
+
+      await prisma.user.update({
+        where: { id: admin.id },
+        data: updates,
+      })
+
+      if (newAttempts >= MAX_LOGIN_ATTEMPTS) {
+        return {
+          success: false,
+          message: `Too many failed attempts. Account locked for 15 minutes.`,
+        }
+      }
+
+      return {
+        success: false,
+        message: `Invalid credentials. ${MAX_LOGIN_ATTEMPTS - newAttempts} attempts remaining.`,
+      }
+    }
+
+    // Reset login attempts on successful password verification
+    await prisma.user.update({
+      where: { id: admin.id },
+      data: { loginAttempts: 0 },
+    })
+
+    // Check if 2FA is required
+    if (admin.twoFactorEnabled && admin.twoFactorSecret) {
+      return {
+        success: true,
+        requiresTwoFactor: true,
+      }
+    }
+
+    // 2FA not enabled, return success
+    return {
+      success: true,
+      requiresTwoFactor: false,
+    }
+  } catch (error) {
+    console.error("Error verifying admin credentials:", error)
+    return {
+      success: false,
+      message: "Authentication error occurred",
+    }
+  }
+}
+
+// Setup 2FA for admin
+export async function setupTwoFactor(): Promise<AdminAuthResult> {
+  try {
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin account not found",
+      }
+    }
+
+    // Generate 2FA secret
+    const secret = speakeasy.generateSecret({
+      name: `ApplyNHire Admin (${ADMIN_EMAIL})`,
+      issuer: "ApplyNHire",
+      length: 32,
+    })
+
+    // Store the secret temporarily (will be confirmed after verification)
+    await prisma.user.update({
+      where: { id: admin.id },
+      data: {
+        twoFactorSecret: secret.base32,
+        twoFactorEnabled: false, // Not enabled until verified
+      },
+    })
+
+    return {
+      success: true,
+      qrCode: secret.otpauth_url,
+      secret: secret.base32,
+    }
+  } catch (error) {
+    console.error("Error setting up 2FA:", error)
+    return {
+      success: false,
+      message: "Failed to setup 2FA",
+    }
+  }
+}
+
+// Verify 2FA token
+export async function verifyTwoFactorToken(
+  email: string,
+  token: string,
+  confirm: boolean = false
+): Promise<AdminAuthResult> {
+  try {
+    if (email !== ADMIN_EMAIL) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+      }
+    }
+
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+      select: {
+        id: true,
+        twoFactorSecret: true,
+        twoFactorEnabled: true,
+      },
+    })
+
+    if (!admin || !admin.twoFactorSecret) {
+      return {
+        success: false,
+        message: "2FA not configured",
+      }
+    }
+
+    // Verify the token
+    const verified = speakeasy.totp.verify({
+      secret: admin.twoFactorSecret,
+      encoding: "base32",
+      token: token,
+      window: 2, // Allow 2 time steps before/after
+    })
+
+    if (!verified) {
+      return {
+        success: false,
+        message: "Invalid authentication code",
+      }
+    }
+
+    // If confirming setup, enable 2FA
+    if (confirm && !admin.twoFactorEnabled) {
+      await prisma.user.update({
+        where: { id: admin.id },
+        data: { twoFactorEnabled: true },
+      })
+    }
+
+    // Update last login
+    await prisma.user.update({
+      where: { id: admin.id },
+      data: {
+        lastLoginAt: new Date(),
+        loginAttempts: 0,
+      },
+    })
+
+    return {
+      success: true,
+    }
+  } catch (error) {
+    console.error("Error verifying 2FA token:", error)
+    return {
+      success: false,
+      message: "Verification error occurred",
+    }
+  }
+}
+
+// Disable 2FA (requires password verification)
+export async function disableTwoFactor(password: string): Promise<AdminAuthResult> {
+  try {
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+      select: {
+        id: true,
+        password: true,
+      },
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin account not found",
+      }
+    }
+
+    // Verify password
+    const passwordMatch = await bcrypt.compare(password, admin.password || "")
+
+    if (!passwordMatch) {
+      return {
+        success: false,
+        message: "Invalid password",
+      }
+    }
+
+    // Disable 2FA
+    await prisma.user.update({
+      where: { id: admin.id },
+      data: {
+        twoFactorEnabled: false,
+        twoFactorSecret: null,
+      },
+    })
+
+    return {
+      success: true,
+      message: "2FA disabled successfully",
+    }
+  } catch (error) {
+    console.error("Error disabling 2FA:", error)
+    return {
+      success: false,
+      message: "Failed to disable 2FA",
+    }
+  }
+}
+
+// Change admin password
+export async function changeAdminPassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<AdminAuthResult> {
+  try {
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+      select: {
+        id: true,
+        password: true,
+      },
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin account not found",
+      }
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, admin.password || "")
+
+    if (!passwordMatch) {
+      return {
+        success: false,
+        message: "Current password is incorrect",
+      }
+    }
+
+    // Validate new password strength
+    if (newPassword.length < 8) {
+      return {
+        success: false,
+        message: "New password must be at least 8 characters long",
+      }
+    }
+
+    // Hash and update password
+    const hashedPassword = await bcrypt.hash(newPassword, 12)
+
+    await prisma.user.update({
+      where: { id: admin.id },
+      data: { password: hashedPassword },
+    })
+
+    return {
+      success: true,
+      message: "Password changed successfully",
+    }
+  } catch (error) {
+    console.error("Error changing password:", error)
+    return {
+      success: false,
+      message: "Failed to change password",
+    }
+  }
+}
+
+// Check if admin is properly authenticated
+export async function verifyAdminSession(email: string): Promise<boolean> {
+  try {
+    if (email !== ADMIN_EMAIL) {
+      return false
+    }
+
+    const admin = await prisma.user.findUnique({
+      where: { email: ADMIN_EMAIL },
+      select: {
+        id: true,
+        role: true,
+        lockedUntil: true,
+      },
+    })
+
+    if (!admin || admin.role !== "ADMIN") {
+      return false
+    }
+
+    // Check if account is locked
+    if (admin.lockedUntil && admin.lockedUntil > new Date()) {
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error("Error verifying admin session:", error)
+    return false
+  }
+}

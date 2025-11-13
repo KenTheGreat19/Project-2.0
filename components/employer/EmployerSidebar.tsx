@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useSession, signOut } from "next-auth/react"
 import { 
   Briefcase, 
   Users, 
@@ -19,7 +20,15 @@ import {
   Megaphone,
   Lightbulb,
   Grid3x3,
-  LayoutDashboard
+  LayoutDashboard,
+  CreditCard,
+  FileText,
+  UserCog,
+  HelpCircle,
+  Layers,
+  LogOut,
+  ChevronUp,
+  User
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -30,6 +39,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface EmployerSidebarProps {
   collapsed?: boolean
@@ -103,6 +119,31 @@ const sidebarItems: SidebarItem[] = [
       { title: "Automations", href: "/employer/tools/automations", icon: Settings },
     ],
   },
+  {
+    title: "Billing & Invoices",
+    href: "/employer/billing",
+    icon: CreditCard,
+  },
+  {
+    title: "Subscriptions",
+    href: "/employer/subscriptions",
+    icon: Layers,
+  },
+  {
+    title: "Employer Settings",
+    href: "/employer/settings",
+    icon: UserCog,
+  },
+  {
+    title: "Users",
+    href: "/employer/users",
+    icon: Users,
+  },
+  {
+    title: "Contact Us",
+    href: "/employer/contact",
+    icon: HelpCircle,
+  },
 ]
 
 interface EmployerSidebarProps {
@@ -117,8 +158,13 @@ export function EmployerSidebar({
   onMobileToggle
 }: EmployerSidebarProps) {
   const pathname = usePathname()
-  const [expandedItems, setExpandedItems] = useState<string[]>(["Jobs", "Analytics"])
+  const { data: session } = useSession()
+  const [expandedItems, setExpandedItems] = useState<string[]>(["Jobs", "Interviews", "Analytics", "Tools", "Employer Settings"])
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
+  
+  const userName = session?.user?.name || "User"
+  const userEmail = session?.user?.email || ""
 
   const handleLinkClick = () => {
     // Close mobile menu when a link is clicked
@@ -270,6 +316,45 @@ export function EmployerSidebar({
               </div>
             ))}
           </nav>
+
+          {/* Profile Section at Bottom */}
+          <div className="border-t pt-4 mt-auto">
+            <DropdownMenu open={showProfileDropdown} onOpenChange={setShowProfileDropdown}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <div className="font-medium truncate">{userName}</div>
+                    <div className="text-xs text-muted-foreground truncate">{userEmail}</div>
+                  </div>
+                  <ChevronUp className={cn(
+                    "h-4 w-4 transition-transform",
+                    showProfileDropdown && "rotate-180"
+                  )} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <Link href="/employer/settings/account">
+                  <DropdownMenuItem>
+                    <User className="h-4 w-4 mr-2" />
+                    Account Settings
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-red-600 focus:text-red-600"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
 

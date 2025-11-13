@@ -222,6 +222,7 @@ async function main() {
       company: employer1.companyName,
       location: 'San Francisco, CA',
       type: 'Full-time',
+      category: 'Technology',
       description: `We're looking for a Senior Full Stack Developer to join our AI team.
 
 **Responsibilities:**
@@ -256,6 +257,7 @@ async function main() {
       company: employer2.companyName,
       location: 'New York, NY',
       type: 'Full-time',
+      category: 'Design',
       description: `Join our creative team as a UI/UX Designer!
 
 **What you'll do:**
@@ -289,6 +291,7 @@ async function main() {
       company: employer3.companyName,
       location: 'Austin, TX',
       type: 'Full-time',
+      category: 'Technology',
       description: `Build the backbone of our e-commerce platform!
 
 **Role:**
@@ -322,6 +325,7 @@ async function main() {
       company: employer1.companyName,
       location: 'Remote',
       type: 'Full-time',
+      category: 'Management',
       description: `Lead cross-functional teams on exciting AI projects.
 
 **Responsibilities:**
@@ -355,6 +359,7 @@ async function main() {
       company: employer4.companyName,
       location: 'Remote',
       type: 'Full-time',
+      category: 'Technology',
       description: `Entry-level opportunity for aspiring developers.
 
 **Responsibilities:**

@@ -29,9 +29,9 @@ import { toast } from "sonner"
 import { Loader2, MapPin } from "lucide-react"
 import dynamic from "next/dynamic"
 
-// Dynamically import Google Maps Location Picker
-const GoogleMapsLocationPicker = dynamic(
-  () => import("@/components/GoogleMapsLocationPicker").then((mod) => ({ default: mod.GoogleMapsLocationPicker })),
+// Dynamically import Location Autocomplete (search only, no map)
+const LocationAutocomplete = dynamic(
+  () => import("@/components/LocationAutocomplete").then((mod) => ({ default: mod.LocationAutocomplete })),
   { ssr: false }
 )
 
@@ -57,6 +57,7 @@ const jobSchema = z.object({
   locationLat: z.number().optional(),
   locationLng: z.number().optional(),
   type: z.enum(["full_time", "part_time", "contract", "internship"]),
+  category: z.string().optional(),
   description: z.string().min(50, "Description must be at least 50 characters"),
   applyUrl: z.string().optional(),
   acceptApplicationsHere: z.boolean().default(false),
@@ -103,6 +104,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
       locationLat: (job as any)?.locationLat || undefined,
       locationLng: (job as any)?.locationLng || undefined,
       type: (job?.type as JobFormData["type"] | undefined) ?? "full_time",
+      category: (job as any)?.category || undefined,
       description: job?.description || "",
       applyUrl: job?.applyUrl || "",
       acceptApplicationsHere: (job as any)?.acceptApplicationsHere || false,
@@ -123,6 +125,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
         locationLat: (job as any).locationLat || undefined,
         locationLng: (job as any).locationLng || undefined,
         type: job.type as JobFormData["type"],
+        category: (job as any).category || undefined,
         description: job.description,
         applyUrl: job.applyUrl,
         acceptApplicationsHere: (job as any).acceptApplicationsHere || false,
@@ -138,6 +141,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
         locationLat: undefined,
         locationLng: undefined,
         type: "full_time",
+        category: undefined,
         description: "",
         applyUrl: "",
         acceptApplicationsHere: false,
@@ -211,11 +215,8 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
 
           <div className="space-y-2">
             <Label htmlFor="location">Location *</Label>
-            <p className="text-xs text-muted-foreground mb-2">
-              Search for a location, click on the map, or drag the pin to set the exact location
-            </p>
             
-            <GoogleMapsLocationPicker
+            <LocationAutocomplete
               onLocationSelect={(location) => {
                 setValue("location", location.address)
                 setValue("locationLat", location.lat)
@@ -233,27 +234,55 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, onSuccess 
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="type">Employment Type *</Label>
-            <Select
-              value={watch("type")}
-              onValueChange={(value) =>
-                setValue("type", value as JobFormData["type"])
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="full_time">Full Time</SelectItem>
-                <SelectItem value="part_time">Part Time</SelectItem>
-                <SelectItem value="contract">Contract</SelectItem>
-                <SelectItem value="internship">Internship</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.type && (
-              <p className="text-sm text-red-500">{errors.type.message}</p>
-            )}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="type">Employment Type *</Label>
+              <Select
+                value={watch("type")}
+                onValueChange={(value) =>
+                  setValue("type", value as JobFormData["type"])
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="full_time">Full Time</SelectItem>
+                  <SelectItem value="part_time">Part Time</SelectItem>
+                  <SelectItem value="contract">Contract</SelectItem>
+                  <SelectItem value="internship">Internship</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.type && (
+                <p className="text-sm text-red-500">{errors.type.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Select
+                value={watch("category") || ""}
+                onValueChange={(value) => setValue("category", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Technology">Technology</SelectItem>
+                  <SelectItem value="Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Finance">Finance</SelectItem>
+                  <SelectItem value="Engineering">Engineering</SelectItem>
+                  <SelectItem value="Education">Education</SelectItem>
+                  <SelectItem value="Sales & Marketing">Sales & Marketing</SelectItem>
+                  <SelectItem value="Design">Design</SelectItem>
+                  <SelectItem value="Retail">Retail</SelectItem>
+                  <SelectItem value="Business">Business</SelectItem>
+                  <SelectItem value="Legal">Legal</SelectItem>
+                  <SelectItem value="Customer Service">Customer Service</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-3">
