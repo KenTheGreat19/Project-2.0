@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth"
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "kentaurch.kcgl@gmail.com"
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const session = await getServerSession(authOptions)
 

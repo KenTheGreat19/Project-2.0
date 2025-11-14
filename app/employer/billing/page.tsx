@@ -2,14 +2,12 @@
 
 import { useState } from "react"
 import { EmployerSidebar } from "@/components/employer/EmployerSidebar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Calendar } from "lucide-react"
-import { AlertCircle, CreditCard, DollarSign, FileText, Info, Search } from "lucide-react"
+import { AlertCircle, CreditCard, FileText, Info, Search } from "lucide-react"
 
 export default function BillingPage() {
   const [startDate, setStartDate] = useState("08/14/2025")

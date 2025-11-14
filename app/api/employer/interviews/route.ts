@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     const interviews = await prisma.interview.findMany({
       where: {
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
         ...(status && { status }),
         ...(jobId && { jobId }),
       },
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
         notes,
         meetingLink,
         location,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 
@@ -98,7 +98,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -117,7 +117,7 @@ export async function PATCH(req: NextRequest) {
     const interview = await prisma.interview.findFirst({
       where: {
         id: interviewId,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 
@@ -148,7 +148,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -166,7 +166,7 @@ export async function DELETE(req: NextRequest) {
     const interview = await prisma.interview.findFirst({
       where: {
         id: interviewId,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 
@@ -190,3 +190,4 @@ export async function DELETE(req: NextRequest) {
     )
   }
 }
+

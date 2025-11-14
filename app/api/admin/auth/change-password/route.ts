@@ -5,7 +5,7 @@ import { verifyAdminSession } from '@/lib/adminAuth';
 
 export async function POST(request: Request) {
   try {
-    const admin = await verifyAdminSession(request);
+    const admin = await verifyAdminSession();
     
     if (!admin) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

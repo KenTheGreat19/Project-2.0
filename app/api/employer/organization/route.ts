@@ -28,12 +28,13 @@ export async function GET() {
       where: { email: session.user.email },
       select: {
         companyName: true,
-        companyWebsite: true,
-        companyDescription: true,
-        companySize: true,
-        industry: true,
+        contactWebsite: true,
+        bio: true,
+        employerType: true,
         email: true,
         phone: true,
+        contactEmail: true,
+        contactPhone: true,
       },
     })
 
@@ -43,10 +44,10 @@ export async function GET() {
 
     return NextResponse.json({
       companyName: user.companyName,
-      companyWebsite: user.companyWebsite,
-      companyDescription: user.companyDescription,
-      companySize: user.companySize,
-      industry: user.industry,
+      companyWebsite: user.contactWebsite,
+      companyDescription: user.bio,
+      companySize: user.employerType,
+      industry: null, // Field doesn't exist in schema
       contactEmail: user.email,
       contactPhone: user.phone,
     })
@@ -75,22 +76,26 @@ export async function PATCH(request: Request) {
       where: { email: session.user.email },
       data: {
         companyName: validatedData.companyName,
-        companyWebsite: validatedData.companyWebsite,
-        companyDescription: validatedData.companyDescription,
-        companySize: validatedData.companySize,
-        industry: validatedData.industry,
+        contactWebsite: validatedData.companyWebsite,
+        bio: validatedData.companyDescription,
+        employerType: validatedData.companySize,
         phone: validatedData.contactPhone,
       },
       select: {
         companyName: true,
-        companyWebsite: true,
-        companyDescription: true,
-        companySize: true,
-        industry: true,
+        contactWebsite: true,
+        bio: true,
+        employerType: true,
       },
     })
 
-    return NextResponse.json(updatedUser)
+    return NextResponse.json({
+      companyName: updatedUser.companyName,
+      companyWebsite: updatedUser.contactWebsite,
+      companyDescription: updatedUser.bio,
+      companySize: updatedUser.employerType,
+      industry: null,
+    })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

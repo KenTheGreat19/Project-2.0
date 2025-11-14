@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -19,9 +19,10 @@ export async function GET(req: NextRequest) {
     startDate.setDate(startDate.getDate() - parseInt(period))
 
     // Get employer's jobs
+    const employerId = (session.user as any).id
     const jobs = await prisma.job.findMany({
       where: {
-        employerId: session.user.id,
+        employerId,
       },
       include: {
         applications: true,
@@ -56,7 +57,7 @@ export async function GET(req: NextRequest) {
     const prevImpressions = await prisma.jobImpression.count({
       where: {
         job: {
-          employerId: session.user.id,
+          employerId,
         },
         createdAt: {
           gte: prevStartDate,
@@ -97,7 +98,7 @@ export async function GET(req: NextRequest) {
       const count = await prisma.application.count({
         where: {
           job: {
-            employerId: session.user.id,
+            employerId,
           },
           appliedAt: {
             gte: date,

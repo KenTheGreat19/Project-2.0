@@ -2,8 +2,8 @@ import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { EmployerSidebar } from "@/components/employer/EmployerSidebar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Briefcase, TrendingUp } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Briefcase } from "lucide-react"
 
 export const metadata = {
   title: "Jobs and Campaigns Analytics - ApplyNHire",

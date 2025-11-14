@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
 
     const teamMembers = await prisma.teamMember.findMany({
       where: {
-        employerId: session.user.id,
+        employerId: (session.user as any).id,
         ...(status && { status }),
       },
       orderBy: {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     // Check if member already exists
     const existingMember = await prisma.teamMember.findFirst({
       where: {
-        employerId: session.user.id,
+        employerId: (session.user as any).id,
         email,
       },
     })
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
 
     const teamMember = await prisma.teamMember.create({
       data: {
-        employerId: session.user.id,
+        employerId: (session.user as any).id,
         email,
         name,
         role,
@@ -104,7 +104,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -123,7 +123,7 @@ export async function PATCH(req: NextRequest) {
     const member = await prisma.teamMember.findFirst({
       where: {
         id: memberId,
-        employerId: session.user.id,
+        employerId: (session.user as any).id,
       },
     })
 
@@ -154,7 +154,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -172,7 +172,7 @@ export async function DELETE(req: NextRequest) {
     const member = await prisma.teamMember.findFirst({
       where: {
         id: memberId,
-        employerId: session.user.id,
+        employerId: (session.user as any).id,
       },
     })
 
@@ -196,3 +196,4 @@ export async function DELETE(req: NextRequest) {
     )
   }
 }
+

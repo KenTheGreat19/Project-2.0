@@ -4,17 +4,17 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 // GET /api/employer/interviews/availability - Get availability settings
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const availability = await prisma.interviewAvailability.findMany({
       where: {
-        userId: session.user.id,
+        userId: (session.user as any).id,
         isActive: true,
       },
       orderBy: {
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     const exceptions = await prisma.interviewException.findMany({
       where: {
-        userId: session.user.id,
+        userId: (session.user as any).id,
         date: {
           gte: new Date(),
         },
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     // Check if availability already exists
     const existing = await prisma.interviewAvailability.findFirst({
       where: {
-        userId: session.user.id,
+        userId: (session.user as any).id,
         dayOfWeek,
         startTime,
         endTime,
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 
     const availability = await prisma.interviewAvailability.create({
       data: {
-        userId: session.user.id,
+        userId: (session.user as any).id,
         dayOfWeek,
         startTime,
         endTime,
@@ -104,7 +104,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -122,7 +122,7 @@ export async function DELETE(req: NextRequest) {
     const availability = await prisma.interviewAvailability.findFirst({
       where: {
         id: availabilityId,
-        userId: session.user.id,
+        userId: (session.user as any).id,
       },
     })
 
@@ -146,3 +146,4 @@ export async function DELETE(req: NextRequest) {
     )
   }
 }
+

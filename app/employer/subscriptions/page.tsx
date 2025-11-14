@@ -1,11 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { EmployerSidebar } from "@/components/employer/EmployerSidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Clock, ExternalLink, Layers } from "lucide-react"
+import { Clock, ExternalLink } from "lucide-react"
 
 export default function SubscriptionsPage() {
   return (

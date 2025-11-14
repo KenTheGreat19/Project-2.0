@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Shield, LogOut, Settings, User } from 'lucide-react';
+import { Shield, LogOut, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 export function AdminHeader() {

@@ -8,12 +8,12 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const { searchParams } = new URL(req.url)
-    const jobTitle = searchParams.get("jobTitle") || ""
+    // const jobTitle = searchParams.get("jobTitle") || ""
     const location = searchParams.get("location") || ""
     const experienceLevel = searchParams.get("experienceLevel")
     const skills = searchParams.get("skills")
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     const savedSearch = await prisma.candidateSearch.create({
       data: {
-        userId: session.user.id,
+        userId: (session.user as any).id,
         searchName,
         jobTitle,
         location,
@@ -104,3 +104,4 @@ export async function POST(req: NextRequest) {
     )
   }
 }
+

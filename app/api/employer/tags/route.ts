@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     const tags = await prisma.jobTag.findMany({
       where: {
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
         name: {
           contains: search,
         },
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     // Check if tag already exists
     const existingTag = await prisma.jobTag.findFirst({
       where: {
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
         name: {
           equals: name,
         },
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         name,
         color: color || "#3b82f6",
         description,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 
@@ -99,7 +99,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -117,7 +117,7 @@ export async function DELETE(req: NextRequest) {
     const tag = await prisma.jobTag.findFirst({
       where: {
         id: tagId,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 
@@ -141,3 +141,4 @@ export async function DELETE(req: NextRequest) {
     )
   }
 }
+

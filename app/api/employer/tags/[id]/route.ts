@@ -11,7 +11,7 @@ export async function PATCH(
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.role !== "EMPLOYER") {
+    if (!session?.user || (session.user as any).role !== "EMPLOYER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -23,7 +23,7 @@ export async function PATCH(
     const tag = await prisma.jobTag.findFirst({
       where: {
         id: tagId,
-        createdBy: session.user.id,
+        createdBy: (session.user as any).id,
       },
     })
 

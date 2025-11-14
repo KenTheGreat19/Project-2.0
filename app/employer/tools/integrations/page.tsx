@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Building2, CheckCircle2, Search, Smartphone, HelpCircle, ArrowRight, Briefcase, Users } from "lucide-react"
+import { Building2, CheckCircle2, Search, HelpCircle, ArrowRight, Briefcase, Users } from "lucide-react"
 
 export default function IntegrationsPage() {
   const [searchQuery, setSearchQuery] = useState("")

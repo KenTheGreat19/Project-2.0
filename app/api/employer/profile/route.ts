@@ -28,13 +28,11 @@ export async function GET() {
         name: true,
         email: true,
         phone: true,
-        jobTitle: true,
         image: true,
         companyName: true,
-        companyWebsite: true,
-        companyDescription: true,
-        companySize: true,
-        industry: true,
+        contactWebsite: true,
+        bio: true,
+        employerType: true,
       },
     })
 
@@ -42,7 +40,12 @@ export async function GET() {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json(user)
+    return NextResponse.json({
+      ...user,
+      companyWebsite: user.contactWebsite,
+      companyDescription: user.bio,
+      companySize: user.employerType,
+    })
   } catch (error) {
     console.error("Error fetching profile:", error)
     return NextResponse.json(
@@ -70,7 +73,6 @@ export async function PATCH(request: Request) {
         name: validatedData.name,
         email: validatedData.email,
         phone: validatedData.phone,
-        jobTitle: validatedData.jobTitle,
         image: validatedData.image,
       },
       select: {
@@ -78,7 +80,6 @@ export async function PATCH(request: Request) {
         name: true,
         email: true,
         phone: true,
-        jobTitle: true,
         image: true,
       },
     })
