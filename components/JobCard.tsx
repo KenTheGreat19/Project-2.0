@@ -1,12 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap, TrendingUp, Eye, Users } from "lucide-react"
+import { MapPin, Briefcase, Clock, DollarSign, TrendingUp, Eye, Users } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { SaveJobButton } from "@/components/SaveJobButton"
-import { LikeButton } from "@/components/LikeButton"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary, truncateText } from "@/lib/utils"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -24,15 +22,9 @@ interface JobCardProps {
     salaryMin?: number | null
     salaryMax?: number | null
     createdAt: Date
-    isSponsored?: boolean
-    likesCount?: number
-    commentsCount?: number
     viewsCount?: number
     applicationsCount?: number
     employer?: {
-      averageRating: number
-      isVerified: boolean
-      totalReviews: number
       employerType?: string | null
     }
   }
@@ -77,15 +69,9 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
   const employerType = getEmployerTypeLabel(job.employer?.employerType as string)
 
   return (
-    <Card className={`hover:shadow-lg transition-shadow ${job.isSponsored ? 'border-2 border-yellow-400 dark:border-yellow-600' : ''}`}>
+    <Card className="hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex gap-2 flex-wrap">
-          {job.isSponsored && (
-            <Badge variant="warning" className="w-fit gap-1">
-              <Zap className="h-3 w-3" />
-              {t("jobs.sponsored")}
-            </Badge>
-          )}
           {showTrendingBadge && (
             <Badge variant="secondary" className="w-fit gap-1 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300">
               <TrendingUp className="h-3 w-3" />
@@ -93,7 +79,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
             </Badge>
           )}
         </div>
-        {(job.isSponsored || showTrendingBadge) && <div className="h-2" />}
+        {showTrendingBadge && <div className="h-2" />}
         <Link 
           href={`/jobs/${job.id}`}
           className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#0A66C2] dark:hover:text-[#0A66C2] transition-colors"
@@ -108,21 +94,9 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
             )}
           </p>
           {employerType && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="secondary" className="text-xs">
               {employerType}
             </Badge>
-          )}
-          {job.employer?.isVerified && (
-            <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400">
-              <CheckCircle className="h-3 w-3" />
-              Verified
-            </span>
-          )}
-          {job.employer && job.employer.averageRating > 0 && (
-            <span className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
-              <Star className="h-3 w-3 fill-current" />
-              {job.employer.averageRating.toFixed(1)} ({job.employer.totalReviews})
-            </span>
           )}
         </div>
       </CardHeader>
@@ -135,7 +109,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
           </Badge>
 
           {job.location && (
-            <Badge variant="outline" className="flex items-center gap-1">
+            <Badge variant="secondary" className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
               {job.location}
             </Badge>
@@ -178,8 +152,6 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
         <Button asChild className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90">
           <Link href={`/jobs/${job.id}`}>View Details</Link>
         </Button>
-        <LikeButton jobId={job.id} initialLikesCount={job.likesCount || 0} />
-        <SaveJobButton jobId={job.id} variant="outline" />
       </CardFooter>
     </Card>
   )

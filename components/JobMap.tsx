@@ -29,16 +29,6 @@ const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
 )
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
-  { ssr: false }
-)
-
-// @ts-ignore
-const MarkerClusterGroup = dynamic(
-  () => import("react-leaflet-markercluster"),
-  { ssr: false }
-)
 
 interface JobLocation {
   id: string
@@ -58,15 +48,6 @@ interface JobLocation {
   country?: string
 }
 
-interface LocationCluster {
-  lat: number
-  lng: number
-  count: number
-  jobs: JobLocation[]
-  label: string
-  level: 'country' | 'state' | 'city' | 'street'
-}
-
 interface JobMapProps {
   jobs: Array<{
     id: string
@@ -79,6 +60,7 @@ interface JobMapProps {
     employerType?: string | null
   }>
   onJobClick?: (jobId: string) => void
+  height?: number
 }
 
 // Geocoding with detailed location breakdown
@@ -141,7 +123,7 @@ function extractCity(location: string): string {
 // Component to handle map updates - can't use useMap directly with dynamic import
 // So we'll control the map through state and MapContainer props instead
 
-export function JobMap({ jobs, onJobClick }: JobMapProps) {
+export function JobMap({ jobs, onJobClick, height: _height = 600 }: JobMapProps) {
   const [jobLocations, setJobLocations] = useState<JobLocation[]>([])
   const [filteredLocations, setFilteredLocations] = useState<JobLocation[]>([])
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
@@ -517,65 +499,63 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
                 />
               )}
 
-              {/* Job markers with clustering */}
-              <MarkerClusterGroup>
-                {filteredLocations.map((job, index) => {
-                  const typeColor = job.employerType === 'COMPANY' ? '#3b82f6' : 
-                                   job.employerType === 'AGENCY' ? '#10b981' : '#eab308';
-                  
-                  const popupHTML = `
-                    <div style="min-width: 220px; padding: 4px; font-family: system-ui, -apple-system, sans-serif;">
-                      <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 8px; color: #111827;">
-                        ${job.title}
-                      </h3>
-                      <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 8px;">
-                        ${job.company}
+              {/* Job markers */}
+              {filteredLocations.map((job, index) => {
+                const typeColor = job.employerType === 'COMPANY' ? '#3b82f6' : 
+                                 job.employerType === 'AGENCY' ? '#10b981' : '#eab308';
+                
+                const popupHTML = `
+                  <div style="min-width: 220px; padding: 4px; font-family: system-ui, -apple-system, sans-serif;">
+                    <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 8px; color: #111827;">
+                      ${job.title}
+                    </h3>
+                    <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 8px;">
+                      ${job.company}
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;">
+                      📍 ${job.location}
+                    </p>
+                    ${job.employerType ? `
+                      <p style="font-size: 0.75rem; margin-bottom: 8px;">
+                        <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; color: white; font-size: 0.75rem; font-weight: 500; background-color: ${typeColor};">
+                          ${job.employerType}
+                        </span>
                       </p>
-                      <p style="font-size: 0.875rem; margin-bottom: 8px;">
-                        📍 ${job.location}
+                    ` : ''}
+                    ${job.distance ? `
+                      <p style="font-size: 0.875rem; color: #2563eb; margin-bottom: 8px;">
+                        🗺️ ${job.distance.toFixed(1)} km away
                       </p>
-                      ${job.employerType ? `
-                        <p style="font-size: 0.75rem; margin-bottom: 8px;">
-                          <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; color: white; font-size: 0.75rem; font-weight: 500; background-color: ${typeColor};">
-                            ${job.employerType}
-                          </span>
-                        </p>
-                      ` : ''}
-                      ${job.distance ? `
-                        <p style="font-size: 0.875rem; color: #2563eb; margin-bottom: 8px;">
-                          🗺️ ${job.distance.toFixed(1)} km away
-                        </p>
-                      ` : ''}
-                      ${job.salaryMin && job.salaryMax ? `
-                        <p style="font-size: 0.875rem; margin-bottom: 12px; color: #059669;">
-                          💰 $${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()}
-                        </p>
-                      ` : ''}
-                      <a 
-                        href="/jobs/${job.id}"
-                        style="display: block; width: 100%; text-align: center; font-size: 0.875rem; padding: 8px 16px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer;"
-                        onmouseover="this.style.background='#1d4ed8'"
-                        onmouseout="this.style.background='#2563eb'"
-                      >
-                        View Details →
-                      </a>
-                    </div>
-                  `;
-                  
-                  return (
-                    <Marker 
-                      key={job.id} 
-                      position={[job.lat, job.lng]}
-                      icon={(window as any).createJobIcon?.(job.employerType || 'COMPANY', index)}
-                      eventHandlers={{
-                        add: (e) => {
-                          e.target.bindPopup(popupHTML, { maxWidth: 280 });
-                        }
-                      }}
-                    />
-                  )
-                })}
-              </MarkerClusterGroup>
+                    ` : ''}
+                    ${job.salaryMin && job.salaryMax ? `
+                      <p style="font-size: 0.875rem; margin-bottom: 12px; color: #059669;">
+                        💰 $${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()}
+                      </p>
+                    ` : ''}
+                    <a 
+                      href="/jobs/${job.id}"
+                      style="display: block; width: 100%; text-align: center; font-size: 0.875rem; padding: 8px 16px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer;"
+                      onmouseover="this.style.background='#1d4ed8'"
+                      onmouseout="this.style.background='#2563eb'"
+                    >
+                      View Details →
+                    </a>
+                  </div>
+                `;
+                
+                return (
+                  <Marker 
+                    key={job.id} 
+                    position={[job.lat, job.lng]}
+                    icon={(window as any).createJobIcon?.(job.employerType || 'COMPANY', index)}
+                    eventHandlers={{
+                      add: (e) => {
+                        e.target.bindPopup(popupHTML, { maxWidth: 280 });
+                      }
+                    }}
+                  />
+                )
+              })}
             </MapContainer>
           </div>
         </Card>

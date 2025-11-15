@@ -4,8 +4,6 @@ import prisma from "@/lib/prisma"
 import { ApplyButton } from "@/components/ApplyButton"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { PublicComments } from "@/components/PublicComments"
-import { EmployerPublicReviews } from "@/components/EmployerPublicReviews"
 import { JobFitGradingWidget } from "@/components/JobFitGradingWidget"
 import { ViewTracker } from "@/components/ViewTracker"
 import { formatDistanceToNow } from "date-fns"
@@ -164,15 +162,6 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                 </div>
               </CardContent>
             </Card>
-
-            {/* Public Comments */}
-            <PublicComments jobId={job.id} />
-
-            {/* Employer Reviews */}
-            <EmployerPublicReviews 
-              employerId={job.employer.id} 
-              companyName={job.company}
-            />
           </div>
 
           {/* Sidebar */}

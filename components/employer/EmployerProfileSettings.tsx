@@ -16,7 +16,6 @@ import {
   Mail,
   ExternalLink
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 
 interface EmployerProfileSettingsProps {
   user: {

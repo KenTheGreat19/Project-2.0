@@ -41,8 +41,6 @@ export async function GET() {
               select: {
                 name: true,
                 companyName: true,
-                averageRating: true,
-                hasVerifiedBadge: true,
               },
             },
           }

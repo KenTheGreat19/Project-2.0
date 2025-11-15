@@ -67,7 +67,7 @@ export async function JobMapSection({ searchParams }: JobMapSectionProps) {
     id: job.id,
     title: job.title,
     company: job.company,
-    location: job.location,
+    location: job.location || "",  // Ensure location is never null
     lat: (job as any).locationLat,
     lng: (job as any).locationLng,
     type: job.type,

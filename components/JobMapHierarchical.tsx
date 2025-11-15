@@ -20,10 +20,6 @@ const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
 )
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
-  { ssr: false }
-)
 
 interface JobLocation {
   id: string
@@ -64,6 +60,7 @@ interface JobMapProps {
     employerType?: string | null
   }>
   onJobClick?: (jobId: string) => void
+  height?: number
 }
 
 // Geocoding with detailed location breakdown
@@ -180,17 +177,7 @@ function clusterJobsByZoom(jobs: JobLocation[], zoom: number): LocationCluster[]
   return Array.from(clusters.values())
 }
 
-// Map event handler component
-function MapEvents({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
-  const map = useMapEvents({
-    zoomend: () => {
-      onZoomChange(map.getZoom())
-    },
-  })
-  return null
-}
-
-export function JobMap({ jobs, onJobClick }: JobMapProps) {
+export function JobMap({ jobs, onJobClick: _onJobClick, height: _height = 600 }: JobMapProps) {
   const [jobLocations, setJobLocations] = useState<JobLocation[]>([])
   const [clusters, setClusters] = useState<LocationCluster[]>([])
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
@@ -269,7 +256,7 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
         }
 
         // Create blue circle for aggregated clusters (city/state/country)
-        ;(window as any).createClusterIcon = (count: number, level: string) => {
+        ;(window as any).createClusterIcon = (count: number, _level: string) => {
           // Blue color for all aggregation levels (country/state/city)
           const color = '#2563eb'
           const strokeColor = '#1e40af'
@@ -363,7 +350,7 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
           setCurrentZoom(13)
           setGeolocating(false)
         },
-        (error) => {
+        (_error) => {
           setLocationError("Unable to get your location. Please enable location services.")
           setGeolocating(false)
         }
@@ -374,9 +361,6 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
     }
   }
 
-  const handleZoomChange = (zoom: number) => {
-    setCurrentZoom(zoom)
-  }
 
   return (
     <div className="space-y-4">
@@ -431,8 +415,6 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
                 maxZoom={19}
                 attribution='&copy; OpenStreetMap contributors'
               />
-              
-              <MapEvents onZoomChange={handleZoomChange} />
               
               {userLocation && (
                 <Marker 
