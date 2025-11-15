@@ -118,7 +118,7 @@ export function CareerResourcesHub() {
                 <CardDescription className="text-xs">{tool.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" size="sm" className="w-full">
+                <Button variant="secondary" size="sm" className="w-full">
                   {tool.action}
                 </Button>
               </CardContent>
@@ -189,7 +189,7 @@ export function CareerResourcesHub() {
                     <Badge variant="secondary" className="text-xs">{cert.category}</Badge>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="secondary" size="sm">
                   Learn More
                 </Button>
               </div>
@@ -224,25 +224,25 @@ export function CareerResourcesHub() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-2">
-            <Button variant="outline" className="justify-start" asChild>
+            <Button variant="secondary" className="justify-start" asChild>
               <a href="https://www.linkedin.com/learning" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 LinkedIn Learning
               </a>
             </Button>
-            <Button variant="outline" className="justify-start" asChild>
+            <Button variant="secondary" className="justify-start" asChild>
               <a href="https://www.coursera.org" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 Coursera
               </a>
             </Button>
-            <Button variant="outline" className="justify-start" asChild>
+            <Button variant="secondary" className="justify-start" asChild>
               <a href="https://www.udemy.com" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 Udemy
               </a>
             </Button>
-            <Button variant="outline" className="justify-start" asChild>
+            <Button variant="secondary" className="justify-start" asChild>
               <a href="https://www.glassdoor.com" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 Glassdoor (Company Reviews)

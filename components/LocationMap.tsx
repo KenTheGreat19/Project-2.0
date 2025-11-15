@@ -38,7 +38,7 @@ export function LocationMap({ initialLat, initialLng, onLocationSelect }: Locati
       try {
         // Dynamically import Leaflet to avoid SSR issues
         const L = (await import("leaflet")).default
-        await import("leaflet/dist/leaflet.css")
+        // await import("leaflet/dist/leaflet.css")
 
         if (!mounted || !mapRef.current) return
 

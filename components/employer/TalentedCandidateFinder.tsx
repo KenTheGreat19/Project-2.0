@@ -126,7 +126,7 @@ export function TalentedCandidateFinder() {
                   <Search className="h-4 w-4" />
                   Find
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button variant="secondary" size="icon">
                   <Filter className="h-4 w-4" />
                 </Button>
               </div>

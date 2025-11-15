@@ -10,8 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { 
-  Video, Calendar, Plus, Trash2, Save, CheckCircle2, 
-  Clock, Target, BookOpen, Loader2, PlayCircle 
+  Video, Calendar, Plus, Trash2, Save, Target, Loader2, PlayCircle 
 } from "lucide-react"
 import { format } from "date-fns"
 
@@ -245,7 +244,7 @@ export function InterviewPrepSystem() {
                   Practiced {prep.practiceCount} times
                 </div>
                 {prep.interviewType && (
-                  <Badge variant="outline">{prep.interviewType}</Badge>
+                  <Badge variant="secondary">{prep.interviewType}</Badge>
                 )}
               </CardContent>
             </Card>
@@ -338,7 +337,7 @@ export function InterviewPrepSystem() {
                   placeholder="Add a question"
                   onKeyDown={(e) => e.key === "Enter" && addQuestion()}
                 />
-                <Button onClick={addQuestion} variant="outline" size="icon">
+                <Button onClick={addQuestion} variant="secondary" size="icon">
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
@@ -363,7 +362,7 @@ export function InterviewPrepSystem() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label>Practice Common Questions</Label>
-                <Badge variant="outline">{answersPrepped.length} prepared</Badge>
+                <Badge variant="secondary">{answersPrepped.length} prepared</Badge>
               </div>
               <div className="space-y-3">
                 {commonQuestions.map((question, i) => {
@@ -383,7 +382,7 @@ export function InterviewPrepSystem() {
                           />
                         ) : (
                           <Button
-                            variant="outline"
+                            variant="secondary"
                             size="sm"
                             onClick={() => addAnswer(question)}
                           >
@@ -412,7 +411,7 @@ export function InterviewPrepSystem() {
                   </>
                 )}
               </Button>
-              <Button onClick={resetForm} variant="outline">
+              <Button onClick={resetForm} variant="secondary">
                 Back to List
               </Button>
             </div>

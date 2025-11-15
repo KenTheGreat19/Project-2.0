@@ -110,7 +110,7 @@ function SearchBarInner() {
         </Button>
         <Button
           onClick={handleClear}
-          variant="outline"
+          variant="secondary"
           className="px-6"
         >
           {t("search.clearFilters")}

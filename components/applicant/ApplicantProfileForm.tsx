@@ -422,7 +422,7 @@ export function ApplicantProfileForm() {
         </Button>
         <Button 
           type="button" 
-          variant="outline"
+          variant="secondary"
           onClick={handleReset}
           disabled={saving}
           size="lg"

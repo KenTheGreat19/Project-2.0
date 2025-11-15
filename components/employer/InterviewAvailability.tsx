@@ -69,7 +69,7 @@ export function InterviewAvailability() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full gap-2" variant="outline">
+              <Button className="w-full gap-2" variant="secondary">
                 <svg className="h-5 w-5" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
                 </svg>
@@ -122,7 +122,7 @@ export function InterviewAvailability() {
             <CardContent>
               <div className="space-y-3">
                 <div className="text-sm font-medium">What hours are you available?</div>
-                <Button variant="outline" className="w-full">
+                <Button variant="secondary" className="w-full">
                   Select date
                 </Button>
               </div>

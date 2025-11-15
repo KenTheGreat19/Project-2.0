@@ -16,7 +16,6 @@ import {
   Mail,
   ExternalLink
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 
 interface EmployerProfileSettingsProps {
   user: {
@@ -209,11 +208,11 @@ export function EmployerProfileSettings({ user }: EmployerProfileSettingsProps) 
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <Button variant="outline" className="w-full justify-start gap-2">
+          <Button variant="secondary" className="w-full justify-start gap-2">
             <ExternalLink className="h-4 w-4" />
             Visit ApplyNHire for job seekers
           </Button>
-          <Button variant="outline" className="w-full justify-start gap-2 text-red-600 hover:text-red-700">
+          <Button variant="secondary" className="w-full justify-start gap-2 text-red-600 hover:text-red-700">
             Sign out
           </Button>
         </CardContent>

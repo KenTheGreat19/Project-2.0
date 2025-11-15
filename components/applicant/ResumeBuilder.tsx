@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
-import { Plus, Trash2, Save, FileText, TrendingUp, AlertCircle, Loader2 } from "lucide-react"
+import { Plus, Trash2, Save, FileText, TrendingUp, Loader2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
@@ -301,7 +301,7 @@ export function ResumeBuilder() {
           </h2>
           <p className="text-muted-foreground">Create ATS-optimized resumes that get noticed</p>
         </div>
-        <Button onClick={resetForm} variant="outline">
+        <Button onClick={resetForm} variant="secondary">
           <Plus className="mr-2 h-4 w-4" />
           New Resume
         </Button>
@@ -472,7 +472,7 @@ export function ResumeBuilder() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Work Experience</h3>
-              <Button onClick={addWorkExperience} variant="outline" size="sm">
+              <Button onClick={addWorkExperience} variant="secondary" size="sm">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Experience
               </Button>
@@ -535,7 +535,7 @@ export function ResumeBuilder() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Education</h3>
-              <Button onClick={addEducation} variant="outline" size="sm">
+              <Button onClick={addEducation} variant="secondary" size="sm">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Education
               </Button>
@@ -602,7 +602,7 @@ export function ResumeBuilder() {
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && addSkill()}
               />
-              <Button onClick={addSkill} variant="outline">
+              <Button onClick={addSkill} variant="secondary">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -649,7 +649,7 @@ export function ResumeBuilder() {
               )}
             </Button>
             {selectedResume && (
-              <Button onClick={resetForm} variant="outline">
+              <Button onClick={resetForm} variant="secondary">
                 Cancel
               </Button>
             )}

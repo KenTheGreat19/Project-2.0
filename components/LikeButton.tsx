@@ -12,7 +12,7 @@ interface LikeButtonProps {
 }
 
 export function LikeButton({ jobId, initialLikesCount = 0 }: LikeButtonProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [liked, setLiked] = useState(false)
   const [likesCount, setLikesCount] = useState(initialLikesCount)
   const [isLoading, setIsLoading] = useState(false)

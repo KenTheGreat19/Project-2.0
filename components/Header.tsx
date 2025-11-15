@@ -97,7 +97,7 @@ export function Header() {
             </button>
           )}
 
-          {status === "authenticated" ? (
+          {status === "authenticated" && (session.user as any)?.role === "ADMIN" && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -114,13 +114,7 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link
-                    href={
-                      (session.user as any)?.role === "EMPLOYER"
-                        ? "/employer/dashboard"
-                        : (session.user as any)?.role === "ADMIN"
-                        ? "/admin"
-                        : "/applicant/dashboard"
-                    }
+                    href="/admin"
                     className="cursor-pointer"
                   >
                     <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -137,23 +131,6 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                asChild
-                className="border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
-              >
-                <Link href="/auth/employer">{t("header.forEmployers")}</Link>
-              </Button>
-
-              <Button
-                asChild
-                className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
-              >
-                <Link href="/auth/applicant">{t("header.signIn")}</Link>
-              </Button>
-            </>
           )}
         </div>
 
@@ -233,7 +210,7 @@ export function Header() {
             </button>
           )}
 
-          {status === "authenticated" ? (
+          {status === "authenticated" && (session.user as any)?.role === "ADMIN" && (
             <>
               <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
                 <p className="font-semibold">{session.user?.name}</p>
@@ -245,15 +222,7 @@ export function Header() {
                 className="w-full"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Link
-                  href={
-                    (session.user as any)?.role === "EMPLOYER"
-                      ? "/employer/dashboard"
-                      : (session.user as any)?.role === "ADMIN"
-                      ? "/admin"
-                      : "/applicant/dashboard"
-                  }
-                >
+                <Link href="/admin">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   {t("header.dashboard")}
                 </Link>
@@ -268,25 +237,6 @@ export function Header() {
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 {t("header.signOut")}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                asChild
-                className="w-full border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Link href="/auth/employer">{t("header.forEmployers")}</Link>
-              </Button>
-
-              <Button
-                asChild
-                className="w-full bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Link href="/auth/applicant">{t("header.signIn")}</Link>
               </Button>
             </>
           )}

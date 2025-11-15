@@ -197,7 +197,7 @@ export function MapboxLocationPicker({
         {selectedLocation && (
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="icon"
             onClick={() => setShowMap(!showMap)}
             title={showMap ? "Hide map" : "View and adjust on map"}

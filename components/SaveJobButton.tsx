@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 interface SaveJobButtonProps {
   jobId: string
@@ -13,7 +12,7 @@ interface SaveJobButtonProps {
 }
 
 export function SaveJobButton({ jobId, size = "default", variant = "ghost" }: SaveJobButtonProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [isSaved, setIsSaved] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 

@@ -270,7 +270,7 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
         </div>
         <div className="space-x-2">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -278,7 +278,7 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
             Previous
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
