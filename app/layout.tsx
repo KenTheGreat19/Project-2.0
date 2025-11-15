@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SessionProvider } from "@/components/SessionProvider"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
@@ -8,12 +7,6 @@ import { Header } from "@/components/Header"
 import { Footer } from "@/components/Footer"
 import { Toaster } from "sonner"
 import "./globals.css"
-
-const inter = Inter({ 
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
@@ -59,7 +52,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen flex flex-col`} suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col font-sans" suppressHydrationWarning>
         <ErrorBoundary>
           <SessionProvider>
             <LanguageProvider>

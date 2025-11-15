@@ -29,10 +29,6 @@ const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
 )
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
-  { ssr: false }
-)
 
 // @ts-ignore
 const MarkerClusterGroup = dynamic(
@@ -56,15 +52,6 @@ interface JobLocation {
   city?: string
   state?: string
   country?: string
-}
-
-interface LocationCluster {
-  lat: number
-  lng: number
-  count: number
-  jobs: JobLocation[]
-  label: string
-  level: 'country' | 'state' | 'city' | 'street'
 }
 
 interface JobMapProps {

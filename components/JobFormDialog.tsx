@@ -26,7 +26,7 @@ import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
-import { Loader2, MapPin } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import dynamic from "next/dynamic"
 
 // Dynamically import Location Picker (no API key needed, uses OpenStreetMap)
@@ -125,7 +125,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, employerTy
         title: job.title,
         company: job.company,
         clientCompanyName: (job as any).clientCompanyName || "",
-        location: job.location,
+        location: job.location || undefined,
         locationLat: (job as any).locationLat || undefined,
         locationLng: (job as any).locationLng || undefined,
         workMode: (job as any).workMode || "onsite",
@@ -311,8 +311,8 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, employerTy
               }}
               initialLocation={{
                 address: watch("location"),
-                lat: watch("locationLat"),
-                lng: watch("locationLng"),
+                lat: watch("locationLat") || undefined,
+                lng: watch("locationLng") || undefined,
               }}
             />
             
