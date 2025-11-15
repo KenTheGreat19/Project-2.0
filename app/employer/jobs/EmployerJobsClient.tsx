@@ -6,7 +6,6 @@ import { EmployerSidebar } from "@/components/employer/EmployerSidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -175,7 +174,7 @@ export default function EmployerJobsClient({ user }: EmployerJobsClientProps) {
                 <CardTitle className="text-3xl">{metrics.approved}</CardTitle>
               </CardHeader>
               <CardContent>
-                <Badge variant="outline">Live</Badge>
+                <Badge variant="secondary">Live</Badge>
               </CardContent>
             </Card>
             <Card>
@@ -299,7 +298,7 @@ export default function EmployerJobsClient({ user }: EmployerJobsClientProps) {
                         {job.location || "No location provided"}
                       </p>
                     </div>
-                    <Badge variant={hasCoordinates ? "default" : "outline"}>
+                    <Badge variant={hasCoordinates ? "default" : "secondary"}>
                       {hasCoordinates ? "Pinned" : "Needs pin"}
                     </Badge>
                   </div>

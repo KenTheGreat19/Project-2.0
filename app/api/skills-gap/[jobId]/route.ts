@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma"
 
 // GET - Analyze skills gap for a specific job
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
   try {

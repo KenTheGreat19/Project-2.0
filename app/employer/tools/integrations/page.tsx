@@ -92,7 +92,7 @@ export default function IntegrationsPage() {
                     <CardTitle>ATS Sync</CardTitle>
                   </div>
                   <CardDescription>
-                    ATS Sync seamlessly transfers job and candidate data between Indeed and your ATS to make hiring faster and easier. While exact functionality varies for each ATS system, here's a closer look at the integrations that may be available when you connect your ATS with Indeed.
+                    ATS Sync seamlessly transfers job and candidate data between Indeed and your ATS to make hiring faster and easier. While exact functionality varies for each ATS system, here&apos;s a closer look at the integrations that may be available when you connect your ATS with Indeed.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -222,7 +222,7 @@ export default function IntegrationsPage() {
                         </div>
                       </div>
                     </div>
-                    <h2 className="text-xl font-bold">You don't have any integrations</h2>
+                    <h2 className="text-xl font-bold">You don&apos;t have any integrations</h2>
                     <p className="text-muted-foreground">
                       Get started on an integration to see it here.
                     </p>

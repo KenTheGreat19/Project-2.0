@@ -29,7 +29,7 @@ export default async function ApplicantDashboard() {
           </p>
         </div>
 
-        <ApplicantDashboardClient userName={user.name} userEmail={user.email} />
+        <ApplicantDashboardClient />
       </div>
     </div>
   )

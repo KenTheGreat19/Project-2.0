@@ -108,7 +108,7 @@ export default function AdminVerificationClient() {
                       <TableCell>{user.name || "N/A"}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">Pending</Badge>
+                        <Badge variant="secondary">Pending</Badge>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {format(new Date(user.createdAt), "MMM d, yyyy")}

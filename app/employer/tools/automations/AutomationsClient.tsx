@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Workflow, Zap, BellRing, MailCheck, ArrowRight } from "lucide-react"
+import { Workflow, Zap, BellRing, ArrowRight } from "lucide-react"
 
 interface AutomationsClientProps {
   user: {

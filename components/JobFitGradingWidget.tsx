@@ -39,6 +39,7 @@ export function JobFitGradingWidget({ jobId }: Props) {
     } else {
       setLoading(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, session, jobId])
 
   const fetchFitScore = async () => {

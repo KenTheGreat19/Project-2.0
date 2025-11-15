@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Briefcase, Calendar, MapPin, ExternalLink, User, UserCircle } from "lucide-react"
+import { Briefcase, Calendar, MapPin, ExternalLink, UserCircle } from "lucide-react"
 import { format } from "date-fns"
 import { toast } from "sonner"
 import Link from "next/link"
@@ -30,21 +30,11 @@ interface Application {
   }
 }
 
-interface ApplicantDashboardClientProps {
-  userName: string
-  userEmail: string
-}
-
-export default function ApplicantDashboardClient({ userName, userEmail }: ApplicantDashboardClientProps) {
+export default function ApplicantDashboardClient() {
   const searchParams = useSearchParams()
   const defaultTab = searchParams.get("tab") || "applications"
   const [applications, setApplications] = React.useState<Application[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
-  const [isEditingProfile, setIsEditingProfile] = React.useState(false)
-  const [profileData, setProfileData] = React.useState({
-    name: userName,
-    email: userEmail,
-  })
 
   React.useEffect(() => {
     fetchApplications()
@@ -60,22 +50,6 @@ export default function ApplicantDashboardClient({ userName, userEmail }: Applic
       toast.error("Failed to load applications")
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  const handleProfileUpdate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsEditingProfile(true)
-    
-    try {
-      // Note: You'd need to create an API endpoint for profile updates
-      // For now, just show a success message
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success("Profile updated successfully")
-    } catch (error) {
-      toast.error("Failed to update profile")
-    } finally {
-      setIsEditingProfile(false)
     }
   }
 
@@ -127,7 +101,7 @@ export default function ApplicantDashboardClient({ userName, userEmail }: Applic
               <div>
                 <CardTitle>Your Applications</CardTitle>
                 <CardDescription>
-                  Jobs you've applied to ({applications.length})
+                  Jobs you&apos;ve applied to ({applications.length})
                 </CardDescription>
               </div>
               <Link href="/">

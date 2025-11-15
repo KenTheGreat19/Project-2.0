@@ -8,7 +8,6 @@ import { AdDisplay } from "@/components/AdDisplay"
 import { JobMapSection } from "@/components/JobMapSection"
 import { TrendingJobs } from "@/components/TrendingJobs"
 import { JobCategories } from "@/components/JobCategories"
-import JoobleAdDisplay from "@/components/JoobleAdDisplay"
 import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function HomePage({
@@ -52,11 +51,6 @@ export default function HomePage({
         <Suspense fallback={<JobListSkeleton />}>
           <JobList searchParams={searchParams} />
         </Suspense>
-      </section>
-
-      {/* Jooble Job Advertisements */}
-      <section className="container mx-auto px-4 py-8">
-        <JoobleAdDisplay limit={6} random={true} />
       </section>
 
       {/* Trending Jobs Section */}

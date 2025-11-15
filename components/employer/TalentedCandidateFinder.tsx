@@ -88,7 +88,7 @@ export function TalentedCandidateFinder() {
             <CardHeader>
               <CardTitle>Discover and engage with top talent</CardTitle>
               <CardDescription>
-                Let us know what you're looking for. We'll find top candidates for you.
+                Let us know what you&apos;re looking for. We&apos;ll find top candidates for you.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

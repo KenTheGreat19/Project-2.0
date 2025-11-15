@@ -33,7 +33,7 @@ export default function CommunityPage() {
               <MessageSquare className="h-16 w-16 mx-auto mb-4 text-[#0A66C2]" />
               <h2 className="text-2xl font-bold mb-4">Coming Soon!</h2>
               <p className="text-lg text-muted-foreground mb-6">
-                We're building an amazing community forum where employers can connect, share experiences, 
+                We&apos;re building an amazing community forum where employers can connect, share experiences, 
                 and learn from each other. Stay tuned!
               </p>
             </CardContent>
@@ -92,7 +92,7 @@ export default function CommunityPage() {
             <CardContent>
               <p className="text-muted-foreground mb-4">
                 Want to be the first to know when the community forum launches? 
-                We'll send you an email when it's ready.
+                We&apos;ll send you an email when it&apos;s ready.
               </p>
               <Link href="/employer/contact">
                 <Button className="bg-[#0A66C2] hover:bg-[#0A66C2]/90">
@@ -109,7 +109,7 @@ export default function CommunityPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-muted-foreground mb-4">
-                While we're building the forum, check out these resources:
+                While we&apos;re building the forum, check out these resources:
               </p>
               <Link href="/employer/hiring-guide">
                 <Button variant="outline" className="w-full justify-start">

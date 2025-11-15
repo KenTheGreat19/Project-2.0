@@ -4,9 +4,9 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { 
-  TrendingUp, TrendingDown, Briefcase, CheckCircle2, 
-  XCircle, Clock, Calendar, Target, BarChart3, Loader2 
+import {
+  TrendingUp, Briefcase, CheckCircle2,
+  XCircle, Clock, Calendar, Target, BarChart3, Loader2
 } from "lucide-react"
 
 type ApplicationStats = {
@@ -280,10 +280,10 @@ export function ApplicationAnalyticsDashboard() {
             <p>• Your interview rate is low. Consider tailoring your resume and cover letters more carefully</p>
           )}
           {stats.averageResponseTime > 14 && (
-            <p>• Follow up on applications after 1-2 weeks if you haven't heard back</p>
+            <p>• Follow up on applications after 1-2 weeks if you haven&apos;t heard back</p>
           )}
           {stats.bestCategory && (
-            <p>• Focus more on {stats.bestCategory} roles where you've had success</p>
+            <p>• Focus more on {stats.bestCategory} roles where you&apos;ve had success</p>
           )}
           {parseFloat(successRate) < 5 && (
             <p>• Consider getting your resume reviewed or taking skill-building courses</p>

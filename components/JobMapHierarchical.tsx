@@ -342,6 +342,7 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
       const newClusters = clusterJobsByZoom(jobLocations, currentZoom)
       setClusters(newClusters)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobLocations, currentZoom])
 
   // Get user location

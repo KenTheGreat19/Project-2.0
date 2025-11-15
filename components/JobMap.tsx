@@ -34,8 +34,9 @@ const useMapEvents = dynamic(
   { ssr: false }
 )
 
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
+// @ts-ignore
+const MarkerClusterGroup = dynamic(
+  () => import("react-leaflet-markercluster"),
   { ssr: false }
 )
 

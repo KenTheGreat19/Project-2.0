@@ -16,7 +16,7 @@ const jobFitCriteriaSchema = z.object({
 })
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -93,13 +93,22 @@ export async function POST(
     const body = await req.json()
     const validatedData = jobFitCriteriaSchema.parse(body)
 
+    // Transform arrays to JSON for Prisma
+    const dataForPrisma = {
+      ...validatedData,
+      essentialSkills: validatedData.essentialSkills ? JSON.stringify(validatedData.essentialSkills) : undefined,
+      technicalSkills: validatedData.technicalSkills ? JSON.stringify(validatedData.technicalSkills) : undefined,
+      personalAttributes: validatedData.personalAttributes ? JSON.stringify(validatedData.personalAttributes) : undefined,
+      culturalValues: validatedData.culturalValues ? JSON.stringify(validatedData.culturalValues) : undefined,
+    }
+
     const criteria = await prisma.jobFitCriteria.upsert({
       where: { jobId },
       create: {
         jobId,
-        ...validatedData,
+        ...dataForPrisma,
       },
-      update: validatedData,
+      update: dataForPrisma,
     })
 
     return NextResponse.json(criteria)

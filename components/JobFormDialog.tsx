@@ -271,7 +271,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, employerTy
           {employerType === "CLIENT" && (
             <div className="space-y-2 rounded-lg border bg-blue-50 dark:bg-blue-950/30 p-4">
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                <strong>Privacy Notice:</strong> Your name will be displayed as "{companyName?.split(' ')[0]} {companyName?.split(' ')[1]?.[0]}." to protect your privacy.
+                <strong>Privacy Notice:</strong> Your name will be displayed as &quot;{companyName?.split(' ')[0]} {companyName?.split(' ')[1]?.[0]}.&quot; to protect your privacy.
               </p>
             </div>
           )}
@@ -444,7 +444,7 @@ export function JobFormDialog({ open, onOpenChange, job, companyName, employerTy
                 </Label>
                 <p className="text-sm text-muted-foreground">
                   Enable this to receive applications directly in your ApplyNHire dashboard. 
-                  An "Apply Now" button will appear on the job post.
+                  An &quot;Apply Now&quot; button will appear on the job post.
                 </p>
               </div>
             </div>

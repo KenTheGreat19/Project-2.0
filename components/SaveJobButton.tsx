@@ -21,6 +21,7 @@ export function SaveJobButton({ jobId, size = "default", variant = "ghost" }: Sa
     if (status === "authenticated") {
       checkIfSaved()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId, status])
 
   const checkIfSaved = async () => {

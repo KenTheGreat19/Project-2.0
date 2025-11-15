@@ -16,7 +16,7 @@ import {
 import { JobsDataTable } from "@/components/JobsDataTable"
 import { JobFormDialog } from "@/components/JobFormDialog"
 import { EmployerSidebar } from "@/components/employer/EmployerSidebar"
-import { Plus, Briefcase, Clock, CheckCircle2, XCircle, Users } from "lucide-react"
+import { Plus, Briefcase, CheckCircle2, XCircle, Users } from "lucide-react"
 import { Job } from "@prisma/client"
 import { toast } from "sonner"
 

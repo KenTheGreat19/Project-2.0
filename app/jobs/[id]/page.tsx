@@ -8,7 +8,6 @@ import { PublicComments } from "@/components/PublicComments"
 import { EmployerPublicReviews } from "@/components/EmployerPublicReviews"
 import { JobFitGradingWidget } from "@/components/JobFitGradingWidget"
 import { ViewTracker } from "@/components/ViewTracker"
-import JoobleAdDisplay from "@/components/JoobleAdDisplay"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary } from "@/lib/utils"
 
@@ -107,7 +106,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                 <div className="flex flex-wrap gap-3">
                   {/* Employer Type Badge */}
                   <Badge 
-                    variant={job.employer.employerType === "COMPANY" ? "default" : job.employer.employerType === "AGENCY" ? "secondary" : "outline"}
+                    variant={job.employer.employerType === "COMPANY" ? "default" : "secondary"}
                     className="py-1.5"
                   >
                     {employerType}
@@ -120,7 +119,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                   </Badge>
 
                   {job.location && (
-                    <Badge variant="outline" className="flex items-center gap-1 py-1.5">
+                    <Badge variant="secondary" className="flex items-center gap-1 py-1.5">
                       <MapPin className="h-4 w-4" />
                       {job.location}
                     </Badge>
@@ -260,9 +259,6 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                 )}
               </CardContent>
             </Card>
-
-            {/* Jooble Job Advertisements */}
-            <JoobleAdDisplay limit={3} random={true} />
           </div>
         </div>
       </div>

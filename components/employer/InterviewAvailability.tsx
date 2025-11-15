@@ -65,7 +65,7 @@ export function InterviewAvailability() {
             <CardHeader>
               <CardTitle className="text-base">Connect your calendar</CardTitle>
               <CardDescription>
-                Automatically prevent double bookings and get new events added as they're scheduled.
+                Automatically prevent double bookings and get new events added as they&apos;re scheduled.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">

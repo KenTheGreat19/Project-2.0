@@ -151,7 +151,7 @@ export default function HiringGuidePage() {
                   <div>
                     <h4 className="font-semibold mb-1">Use Behavioral Questions</h4>
                     <p className="text-sm text-muted-foreground">
-                      "Tell me about a time when..." questions reveal past behavior and decision-making.
+                      &quot;Tell me about a time when...&quot; questions reveal past behavior and decision-making.
                     </p>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function HiringGuidePage() {
                   <div>
                     <h4 className="font-semibold mb-1">Follow Up Promptly</h4>
                     <p className="text-sm text-muted-foreground">
-                      Top candidates have multiple offers. Quick communication shows you're serious.
+                      Top candidates have multiple offers. Quick communication shows you&apos;re serious.
                     </p>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export default function HiringGuidePage() {
                   <div>
                     <h4 className="font-semibold mb-1">Provide a Great Candidate Experience</h4>
                     <p className="text-sm text-muted-foreground">
-                      Clear communication, respect for candidates' time, and feedback build your reputation.
+                      Clear communication, respect for candidates&apos; time, and feedback build your reputation.
                     </p>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import prisma from "@/lib/prisma"
@@ -34,7 +34,7 @@ export async function GET() {
       // Calculate response time (average days between application and status change)
       const respondedApplications = applications.filter(a => a.status !== "pending")
       const averageResponseTime = respondedApplications.length > 0
-        ? respondedApplications.reduce((sum, app) => {
+        ? respondedApplications.reduce((sum, app: any) => {
             const responseTime = (app.updatedAt.getTime() - app.appliedAt.getTime()) / (1000 * 60 * 60 * 24)
             return sum + responseTime
           }, 0) / respondedApplications.length

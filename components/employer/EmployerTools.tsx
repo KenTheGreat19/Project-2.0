@@ -163,7 +163,7 @@ export function EmployerTools() {
                   <div>
                     <h4 className="font-medium mb-1">Advanced Features</h4>
                     <p className="text-sm text-muted-foreground">
-                      Unlock the full potential of ApplyNHire's employer tools
+                      Unlock the full potential of ApplyNHire&apos;s employer tools
                     </p>
                   </div>
                 </div>

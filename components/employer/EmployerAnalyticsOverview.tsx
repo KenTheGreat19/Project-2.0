@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { 
   TrendingUp, 
   TrendingDown,
@@ -52,6 +53,7 @@ export function EmployerAnalyticsOverview() {
 
   useEffect(() => {
     fetchAnalytics()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [period])
 
   const fetchAnalytics = async () => {

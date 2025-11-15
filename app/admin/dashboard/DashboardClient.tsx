@@ -10,7 +10,6 @@ import {
   Building2, 
   UserCheck,
   FileText,
-  Globe,
   ShieldCheck,
   TrendingUp,
   TrendingDown,
@@ -18,12 +17,10 @@ import {
   Heart,
   DollarSign,
   ArrowRight,
-  AlertCircle,
   CheckCircle2,
   Clock,
   XCircle
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 
 interface Stats {
   totalJobs: number
@@ -154,13 +151,6 @@ export default function AdminDashboardClient() {
       variant: "info" as const,
     },
     {
-      title: "Manage Jooble Ads",
-      description: "Review and approve job advertisements",
-      icon: Globe,
-      link: "/admin/jooble",
-      variant: "success" as const,
-    },
-    {
       title: "View All Applications",
       description: "Monitor application activity",
       icon: FileText,
@@ -175,7 +165,7 @@ export default function AdminDashboardClient() {
       <div>
         <h2 className="text-3xl font-bold">Welcome Back, Admin! 👋</h2>
         <p className="text-muted-foreground mt-1">
-          Here's what's happening with your platform today.
+          Here&apos;s what&apos;s happening with your platform today.
         </p>
       </div>
 

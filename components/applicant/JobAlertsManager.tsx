@@ -388,7 +388,7 @@ export function JobAlertsManager() {
           <p>• Choose how often you want to receive notifications</p>
           <p>• Get instant alerts for jobs that match your preferences</p>
           <p>• Pause or delete alerts anytime</p>
-          <p>• Never miss an opportunity that's right for you</p>
+          <p>• Never miss an opportunity that&apos;s right for you</p>
         </CardContent>
       </Card>
     </div>

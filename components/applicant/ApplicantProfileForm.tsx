@@ -243,7 +243,7 @@ export function ApplicantProfileForm() {
           {commonEssentialSkills.map(skill => (
             <Badge
               key={skill}
-              variant={essentialSkills.includes(skill) ? "default" : "outline"}
+              variant={essentialSkills.includes(skill) ? "default" : "secondary"}
               className="cursor-pointer"
               onClick={() => addPredefinedItem(skill, setEssentialSkills)}
             >
@@ -280,7 +280,7 @@ export function ApplicantProfileForm() {
           {commonTechnicalSkills.map(skill => (
             <Badge
               key={skill}
-              variant={technicalSkills.includes(skill) ? "default" : "outline"}
+              variant={technicalSkills.includes(skill) ? "default" : "secondary"}
               className="cursor-pointer"
               onClick={() => addPredefinedItem(skill, setTechnicalSkills)}
             >
@@ -317,7 +317,7 @@ export function ApplicantProfileForm() {
           {commonAttributes.map(attr => (
             <Badge
               key={attr}
-              variant={personalAttributes.includes(attr) ? "default" : "outline"}
+              variant={personalAttributes.includes(attr) ? "default" : "secondary"}
               className="cursor-pointer"
               onClick={() => addPredefinedItem(attr, setPersonalAttributes)}
             >
@@ -354,7 +354,7 @@ export function ApplicantProfileForm() {
           {commonValues.map(value => (
             <Badge
               key={value}
-              variant={culturalValues.includes(value) ? "default" : "outline"}
+              variant={culturalValues.includes(value) ? "default" : "secondary"}
               className="cursor-pointer"
               onClick={() => addPredefinedItem(value, setCulturalValues)}
             >

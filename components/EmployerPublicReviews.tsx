@@ -41,6 +41,7 @@ export function EmployerPublicReviews({ employerId, companyName }: EmployerPubli
 
   useEffect(() => {
     fetchReviews()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [employerId])
 
   const fetchReviews = async () => {

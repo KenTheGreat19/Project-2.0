@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -20,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Users as UsersIcon, UserCheck, Building2, Search, Star } from "lucide-react"
+import { UserCheck, Search, Star } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
@@ -200,7 +199,7 @@ export default function AdminUsersClient() {
                       <TableCell className="font-medium">{user.name || "N/A"}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        <Badge variant={user.role === "EMPLOYER" ? "default" : user.role === "APPLICANT" ? "secondary" : "outline"}>
+                        <Badge variant={user.role === "EMPLOYER" ? "default" : user.role === "APPLICANT" ? "secondary" : "secondary"}>
                           {user.role}
                         </Badge>
                       </TableCell>
@@ -232,7 +231,7 @@ export default function AdminUsersClient() {
                             Verified
                           </Badge>
                         ) : (
-                          <Badge variant="outline">Not Verified</Badge>
+                          <Badge variant="secondary">Not Verified</Badge>
                         )}
                       </TableCell>
                     </TableRow>

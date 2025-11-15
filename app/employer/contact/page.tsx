@@ -92,7 +92,7 @@ export default function ContactPage() {
                       <div className="flex-1">
                         <div className="font-semibold mb-1">Send us a message</div>
                         <div className="text-sm text-muted-foreground">
-                          We'll respond within 24 hours
+                          We&apos;ll respond within 24 hours
                         </div>
                       </div>
                       <ChevronRight className="h-5 w-5 mt-1" />
@@ -315,7 +315,7 @@ export default function ContactPage() {
                 <div className="border-b pb-4">
                   <h4 className="font-semibold mb-2">How do I post a job?</h4>
                   <p className="text-sm text-muted-foreground">
-                    Navigate to the Jobs section from the sidebar and click "Post a Job". Fill in the required details and publish your listing.
+                    Navigate to the Jobs section from the sidebar and click &quot;Post a Job&quot;. Fill in the required details and publish your listing.
                   </p>
                 </div>
                 <div className="border-b pb-4">
@@ -333,7 +333,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold mb-2">How do I add team members?</h4>
                   <p className="text-sm text-muted-foreground">
-                    Go to Users section from the sidebar and click "Add User" to invite team members to your employer account.
+                    Go to Users section from the sidebar and click &quot;Add User&quot; to invite team members to your employer account.
                   </p>
                 </div>
               </CardContent>

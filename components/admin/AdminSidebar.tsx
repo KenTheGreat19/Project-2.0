@@ -11,18 +11,15 @@ import {
   Building2,
   UserCheck,
   FileText,
-  Globe,
   ShieldCheck,
   Settings,
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Bell,
   Search,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,11 +67,6 @@ const navigation: NavItem[] = [
     title: "Applications",
     href: "/admin/applications",
     icon: FileText,
-  },
-  {
-    title: "Jooble Ads",
-    href: "/admin/jooble",
-    icon: Globe,
   },
   {
     title: "Verification",
@@ -137,7 +129,7 @@ export function AdminSidebar() {
       )}
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-3 py-4">
+      <div className="flex-1 overflow-y-auto px-3 py-4">
         <nav className="space-y-1">
           {navigation.map((item) => {
             const Icon = item.icon
@@ -170,7 +162,7 @@ export function AdminSidebar() {
             )
           })}
         </nav>
-      </ScrollArea>
+      </div>
 
       {/* Footer */}
       <div className="border-t p-4">

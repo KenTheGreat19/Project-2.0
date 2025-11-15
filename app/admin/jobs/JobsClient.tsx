@@ -44,7 +44,6 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
-  ExternalLink,
   Trash2,
   Eye,
   Users,
@@ -303,7 +302,7 @@ export default function AdminJobsClient() {
                       <TableCell>{job.type}</TableCell>
                       <TableCell>
                         {job.status === "pending" && (
-                          <Badge variant="outline" className="gap-1">
+                          <Badge variant="secondary" className="gap-1">
                             <Clock className="h-3 w-3" />
                             Pending
                           </Badge>

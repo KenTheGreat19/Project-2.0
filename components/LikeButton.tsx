@@ -21,6 +21,7 @@ export function LikeButton({ jobId, initialLikesCount = 0 }: LikeButtonProps) {
     if (status === "authenticated") {
       checkLikeStatus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, jobId])
 
   const checkLikeStatus = async () => {

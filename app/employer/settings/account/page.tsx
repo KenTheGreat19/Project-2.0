@@ -131,7 +131,7 @@ export default function AccountSettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Email Notifications</CardTitle>
-                  <CardDescription>Choose what emails you'd like to receive</CardDescription>
+                  <CardDescription>Choose what emails you&apos;d like to receive</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -147,7 +147,7 @@ export default function AccountSettingsPage() {
                     <div>
                       <div className="font-medium">Application Updates</div>
                       <div className="text-sm text-muted-foreground">
-                        Updates about candidates you've contacted
+                        Updates about candidates you&apos;ve contacted
                       </div>
                     </div>
                     <Switch defaultChecked />
@@ -182,7 +182,7 @@ export default function AccountSettingsPage() {
                     <Smartphone className="h-5 w-5" />
                     <CardTitle>Active Sessions</CardTitle>
                   </div>
-                  <CardDescription>Manage devices where you're currently logged in</CardDescription>
+                  <CardDescription>Manage devices where you&apos;re currently logged in</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-start justify-between p-4 border rounded-lg">

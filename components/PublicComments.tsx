@@ -37,6 +37,7 @@ export function PublicComments({ jobId }: PublicCommentsProps) {
 
   useEffect(() => {
     fetchComments()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId])
 
   const fetchComments = async () => {

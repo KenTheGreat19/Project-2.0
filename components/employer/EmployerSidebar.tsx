@@ -376,7 +376,7 @@ export function EmployerSidebar({
           <DialogHeader>
             <DialogTitle>Create new</DialogTitle>
             <DialogDescription>
-              Choose what you'd like to create
+              Choose what you&apos;d like to create
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

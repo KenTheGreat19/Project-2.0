@@ -152,7 +152,7 @@ export default function UsersManagementClient({ user }: UsersManagementClientPro
 
                   <div className="pt-6 border-t">
                     <p className="text-xs text-muted-foreground">
-                      By adding roles for users, I agree that this user's access will match the roles I have selected, and that I am authorized to grant such access. Pending invitations expire after 15 days. Need to change the owner of your ApplyNHire employer account?{" "}
+                      By adding roles for users, I agree that this user&apos;s access will match the roles I have selected, and that I am authorized to grant such access. Pending invitations expire after 15 days. Need to change the owner of your ApplyNHire employer account?{" "}
                       <Link href="/contact" className="text-blue-600 hover:underline">Contact us</Link>.
                     </p>
                     <p className="text-xs text-muted-foreground mt-2">

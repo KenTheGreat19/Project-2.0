@@ -428,7 +428,7 @@ export function InterviewPrepSystem() {
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 <p>• Use the STAR method (Situation, Task, Action, Result) for behavioral questions</p>
-                <p>• Research the company's recent news and achievements</p>
+                <p>• Research the company&apos;s recent news and achievements</p>
                 <p>• Prepare 3-5 thoughtful questions to ask the interviewer</p>
                 <p>• Practice your answers out loud multiple times</p>
                 <p>• Test your tech setup 15 minutes before virtual interviews</p>

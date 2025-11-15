@@ -15,7 +15,7 @@ export default function GetStartedPage() {
 
         <CardContent className="flex flex-col gap-4 items-center py-6">
           <p className="text-sm text-muted-foreground text-center max-w-md">
-            Choose the option that best describes you. You'll be taken to the appropriate sign in / sign up page.
+            Choose the option that best describes you. You&apos;ll be taken to the appropriate sign in / sign up page.
           </p>
 
           <div className="w-full flex flex-col sm:flex-row gap-3 mt-4">

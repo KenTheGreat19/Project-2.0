@@ -29,7 +29,6 @@ export async function GET() {
         createdAt: true,
         _count: {
           select: {
-            jobsPosted: true,
             applications: true,
           }
         }

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { FileText, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
@@ -196,7 +196,7 @@ export default function AdminApplicationsClient() {
                             app.status === "hired" ? "default" :
                             app.status === "accepted" ? "secondary" :
                             app.status === "rejected" ? "destructive" :
-                            "outline"
+                            "secondary"
                           }
                         >
                           {app.status}

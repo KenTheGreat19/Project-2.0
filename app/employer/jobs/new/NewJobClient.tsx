@@ -73,11 +73,11 @@ export default function NewJobClient({ user }: NewJobClientProps) {
                   We pre-filled your company information. You can save and continue later from the dashboard.
                 </p>
                 <div className="flex flex-wrap gap-2 text-sm">
-                  <Badge variant="outline" className="gap-1">
+                  <Badge variant="secondary" className="gap-1">
                     <ClipboardList className="h-3.5 w-3.5" />
                     Structured form
                   </Badge>
-                  <Badge variant="outline" className="gap-1">
+                  <Badge variant="secondary" className="gap-1">
                     <Clock className="h-3.5 w-3.5" />
                     Avg. 4 min
                   </Badge>

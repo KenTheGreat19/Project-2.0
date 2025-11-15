@@ -45,6 +45,7 @@ export function JobTagsManager() {
 
   useEffect(() => {
     fetchTags()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, searchQuery])
 
   const fetchTags = async () => {
@@ -248,7 +249,7 @@ export function JobTagsManager() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                It doesn't look like you're using tags yet.
+                It doesn&apos;t look like you&apos;re using tags yet.
               </h3>
               <p className="text-muted-foreground max-w-md mb-6">
                 Create tags to organize your job postings. Tags make it easy to quickly search for a group of jobs in the future.

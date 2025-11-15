@@ -190,7 +190,7 @@ export default function AboutPage() {
           <CardContent className="text-center py-8">
             <h3 className="text-2xl font-bold mb-4">Have Questions?</h3>
             <p className="text-muted-foreground mb-6">
-              We're here to help! Reach out to us anytime.
+              We&apos;re here to help! Reach out to us anytime.
             </p>
             <Link href="/contact">
               <Button size="lg" className="bg-[#0A66C2] hover:bg-[#0A66C2]/90">

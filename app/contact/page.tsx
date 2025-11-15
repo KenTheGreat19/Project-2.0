@@ -59,7 +59,7 @@ export default function ContactPage() {
               <CheckCircle className="h-20 w-20 text-green-500 mx-auto mb-6" />
               <h2 className="text-3xl font-bold mb-4">Thank You!</h2>
               <p className="text-lg text-muted-foreground mb-8">
-                We've received your message and will get back to you within 24-48 hours.
+                We&apos;ve received your message and will get back to you within 24-48 hours.
               </p>
               <div className="flex gap-4 justify-center">
                 <Link href="/">
@@ -94,7 +94,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Have a question or need help? We're here for you.
+            Have a question or need help? We&apos;re here for you.
           </p>
         </div>
 
@@ -108,7 +108,7 @@ export default function ContactPage() {
                   Send Us a Message
                 </CardTitle>
                 <CardDescription>
-                  Fill out the form below and we'll get back to you as soon as possible.
+                  Fill out the form below and we&apos;ll get back to you as soon as possible.
                 </CardDescription>
               </CardHeader>
               <CardContent>
