@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "You have already applied to this job" }, { status: 400 })
     }
 
-    // Create application
+    // Create application and increment applicationsCount
     const application = await prisma.application.create({
       data: {
         jobId,
@@ -147,6 +147,12 @@ export async function POST(request: NextRequest) {
           },
         },
       },
+    })
+
+    // Increment applications count
+    await prisma.job.update({
+      where: { id: jobId },
+      data: { applicationsCount: { increment: 1 } },
     })
 
     return NextResponse.json(application, { status: 201 })

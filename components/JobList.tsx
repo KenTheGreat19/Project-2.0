@@ -1,6 +1,41 @@
+"use client"
+
 import prisma from "@/lib/prisma"
 import { JobCard } from "@/components/JobCard"
 import { AdDisplay } from "@/components/AdDisplay"
+import { useLanguage } from "@/contexts/LanguageContext"
+
+function JobListClient({ jobs, sponsoredCount }: { jobs: any[], sponsoredCount: number }) {
+  const { t } = useLanguage()
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {jobs.length} {jobs.length === 1 ? t("jobs.noJobsFound").replace("No jobs", "Job") : t("search.searchJobs")} {t("jobs.noJobsFound").includes("found") ? "" : "Found"}
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          {sponsoredCount > 0 && `${sponsoredCount} ${t("jobs.sponsored")} • `}
+          Ranked by engagement, employer reputation, and recency
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobs.map((job, index) => (
+          <div key={job.id}>
+            <JobCard job={job} />
+            {/* Show inline ad every 6 jobs for guests */}
+            {(index + 1) % 6 === 0 && index !== jobs.length - 1 && (
+              <div className="col-span-full">
+                <AdDisplay position="inline" />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 interface JobListProps {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -129,33 +164,7 @@ export async function JobList({ searchParams }: JobListProps) {
 
     const sponsoredCount = sponsoredJobs.length
 
-    return (
-      <div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {rankedJobs.length} {rankedJobs.length === 1 ? "Job" : "Jobs"} Found
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {sponsoredCount > 0 && `${sponsoredCount} Sponsored • `}
-            Ranked by engagement, employer reputation, and recency
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rankedJobs.map((job, index) => (
-            <div key={job.id}>
-              <JobCard job={job} />
-              {/* Show inline ad every 6 jobs for guests */}
-              {(index + 1) % 6 === 0 && index !== rankedJobs.length - 1 && (
-                <div className="col-span-full">
-                  <AdDisplay position="inline" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    )
+    return <JobListClient jobs={rankedJobs} sponsoredCount={sponsoredCount} />
   } catch (error) {
     console.error("Error loading jobs:", error)
     return (

@@ -41,6 +41,25 @@ export async function POST(
 
     // If not sponsored, just count the view
     if (!job.isSponsored) {
+      // Check for duplicate view
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+      const existingView = await prisma.jobImpression.findFirst({
+        where: {
+          jobId,
+          createdAt: { gte: oneHourAgo },
+          ...(userId
+            ? { userId }
+            : { ipAddress, userAgent }),
+        },
+      })
+
+      if (!existingView) {
+        // Increment views count
+        await prisma.job.update({
+          where: { id: jobId },
+          data: { viewsCount: { increment: 1 } },
+        })
+      }
       return NextResponse.json({ success: true, sponsored: false })
     }
 
@@ -128,11 +147,12 @@ export async function POST(
         },
       })
 
-      // Increment impression count
+      // Increment impression count and views count
       const updatedJob = await prisma.job.update({
         where: { id: jobId },
         data: {
           impressionsUsed: { increment: 1 },
+          viewsCount: { increment: 1 },
         },
         include: {
           employer: {

@@ -112,11 +112,19 @@ export function JobsDataTable({ data, onEdit, onDelete }: DataTableProps) {
       },
     },
     {
+      accessorKey: "viewsCount",
+      header: "Views",
+      cell: ({ row }) => {
+        const count = row.original.viewsCount || 0
+        return <div className="text-center">{count > 100 ? "100+" : count}</div>
+      },
+    },
+    {
       accessorKey: "_count.applications",
       header: "Applications",
       cell: ({ row }) => {
         const count = row.original._count.applications
-        return <div className="text-center">{count}</div>
+        return <div className="text-center">{count > 100 ? "100+" : count}</div>
       },
     },
     {

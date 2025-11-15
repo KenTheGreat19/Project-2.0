@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id                  String   @id @default(cuid())
+  employerId          String?  @unique
   email               String   @unique
   name                String
   password            String?
@@ -129,6 +130,7 @@ model Job {
   likesCount          Int      @default(0)
   commentsCount       Int      @default(0)
   viewsCount          Int      @default(0)
+  applicationsCount   Int      @default(0)
   engagementScore     Float    @default(0)  // Calculated: (likes × 2) + (comments × 1)
   
   employerId          String

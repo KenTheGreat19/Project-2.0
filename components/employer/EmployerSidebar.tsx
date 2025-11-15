@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
@@ -159,7 +159,19 @@ export function EmployerSidebar({
 }: EmployerSidebarProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
-  const [expandedItems, setExpandedItems] = useState<string[]>(["Jobs", "Interviews", "Analytics", "Tools", "Employer Settings"])
+
+  // Local collapsed state: fall back to internal handling when parent
+  // doesn't provide an `onCollapse` handler.
+  const [localCollapsed, setLocalCollapsed] = useState<boolean>(collapsed)
+  useEffect(() => setLocalCollapsed(collapsed), [collapsed])
+  const handleCollapse = (value: boolean) => {
+    if (onCollapse) onCollapse(value)
+    else setLocalCollapsed(value)
+  }
+
+  // Start with Jobs, Interviews, Analytics and Tools collapsed by default
+  // Keep 'Employer Settings' expanded by default for quick access
+  const [expandedItems, setExpandedItems] = useState<string[]>(["Employer Settings"])
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   
@@ -193,14 +205,14 @@ export function EmployerSidebar({
     return false
   }
 
-  if (collapsed) {
+  if (localCollapsed) {
     return (
       <div className="w-16 border-r bg-card h-screen sticky top-0 hidden lg:block">
         <div className="p-4">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onCollapse?.(false)}
+            onClick={() => handleCollapse(false)}
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
@@ -241,7 +253,7 @@ export function EmployerSidebar({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => onCollapse?.(true)}
+              onClick={() => handleCollapse(true)}
             >
               <X className="h-5 w-5" />
             </Button>

@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 function calculateCategoryScore(
   applicantData: any[],
   requiredData: any[],
-  weights?: any
+  _weights?: any
 ): { score: number; status: string } {
   if (!requiredData || requiredData.length === 0) {
     return { score: 100, status: "passed" }
@@ -116,7 +116,7 @@ function calculateExperienceScore(
 }
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
   try {

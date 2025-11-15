@@ -93,11 +93,13 @@ export default function EmployerDashboardClient({ user }: EmployerDashboardClien
   }
 
   const stats = React.useMemo(() => {
+    const totalApplications = jobs.reduce((sum, job) => sum + (job._count?.applications || 0), 0)
     return {
       total: jobs.length,
       pending: jobs.filter((j) => j.status === "pending").length,
       approved: jobs.filter((j) => j.status === "approved").length,
       rejected: jobs.filter((j) => j.status === "rejected").length,
+      totalApplications,
     }
   }, [jobs])
 
@@ -171,7 +173,7 @@ export default function EmployerDashboardClient({ user }: EmployerDashboardClien
             <Users className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalApplications || 0}</div>
+            <div className="text-2xl font-bold">{stats.totalApplications}</div>
             <p className="text-xs text-muted-foreground mt-1">Total received</p>
           </CardContent>
         </Card>

@@ -21,7 +21,7 @@ export default async function EmployerProfilePage() {
       <EmployerSidebar />
       <div className="flex-1 overflow-y-auto">
         <div className="container mx-auto px-6 py-8 max-w-6xl">
-          <EmployerProfileSettings />
+          <EmployerProfileSettings user={session.user as any} />
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { data: session, status } = useSession()
-  const { currentLanguage, setLanguage } = useLanguage()
+  const { currentLanguage, setLanguage, t } = useLanguage()
 
   useEffect(() => {
     setMounted(true)
@@ -35,7 +35,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-3">
           <Image src="/logo.png" alt="apply n hire logo" width={44} height={44} />
           <span className="text-[1.25rem] font-bold text-[#0A66C2] hover:opacity-80 transition-opacity">
-            apply n hire
+            {t("header.logo")}
           </span>
         </Link>
 
@@ -58,12 +58,14 @@ export function Header() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 max-h-96 overflow-y-auto">
-              <DropdownMenuLabel>Select Language</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("header.selectLanguage")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {languages.map((language) => (
                 <DropdownMenuItem
                   key={language.code}
-                  onClick={() => setLanguage(language)}
+                  onSelect={() => {
+                    setLanguage(language)
+                  }}
                   className="cursor-pointer"
                 >
                   <Image 
@@ -122,7 +124,7 @@ export function Header() {
                     className="cursor-pointer"
                   >
                     <LayoutDashboard className="mr-2 h-4 w-4" />
-                    Dashboard
+                    {t("header.dashboard")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -131,7 +133,7 @@ export function Header() {
                   className="cursor-pointer text-red-600"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
+                  {t("header.signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -142,14 +144,14 @@ export function Header() {
                 asChild
                 className="border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
               >
-                <Link href="/auth/employer">For Employers</Link>
+                <Link href="/auth/employer">{t("header.forEmployers")}</Link>
               </Button>
 
               <Button
                 asChild
                 className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
               >
-                <Link href="/auth/applicant">For Applicants</Link>
+                <Link href="/auth/applicant">{t("header.signIn")}</Link>
               </Button>
             </>
           )}
@@ -187,12 +189,14 @@ export function Header() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center" className="w-56 max-h-96 overflow-y-auto">
-              <DropdownMenuLabel>Select Language</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("header.selectLanguage")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {languages.map((language) => (
                 <DropdownMenuItem
                   key={language.code}
-                  onClick={() => setLanguage(language)}
+                  onSelect={() => {
+                    setLanguage(language)
+                  }}
                   className="cursor-pointer"
                 >
                   <Image 
@@ -251,7 +255,7 @@ export function Header() {
                   }
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" />
-                  Dashboard
+                  {t("header.dashboard")}
                 </Link>
               </Button>
               <Button
@@ -263,7 +267,7 @@ export function Header() {
                 }}
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
+                {t("header.signOut")}
               </Button>
             </>
           ) : (
@@ -274,7 +278,7 @@ export function Header() {
                 className="w-full border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Link href="/auth/employer">For Employers</Link>
+                <Link href="/auth/employer">{t("header.forEmployers")}</Link>
               </Button>
 
               <Button
@@ -282,7 +286,7 @@ export function Header() {
                 className="w-full bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Link href="/auth/applicant">For Applicants</Link>
+                <Link href="/auth/applicant">{t("header.signIn")}</Link>
               </Button>
             </>
           )}

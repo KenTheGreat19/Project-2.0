@@ -1,5 +1,7 @@
+"use client"
+
 import Link from "next/link"
-import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap, TrendingUp } from "lucide-react"
+import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap, TrendingUp, Eye, Users } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -7,6 +9,7 @@ import { SaveJobButton } from "@/components/SaveJobButton"
 import { LikeButton } from "@/components/LikeButton"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary, truncateText } from "@/lib/utils"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface JobCardProps {
   job: {
@@ -24,6 +27,8 @@ interface JobCardProps {
     isSponsored?: boolean
     likesCount?: number
     commentsCount?: number
+    viewsCount?: number
+    applicationsCount?: number
     employer?: {
       averageRating: number
       isVerified: boolean
@@ -35,30 +40,41 @@ interface JobCardProps {
 }
 
 export function JobCard({ job, showTrendingBadge }: JobCardProps) {
-  const employmentTypeLabels: Record<string, string> = {
-    full_time: "Full Time",
-    part_time: "Part Time",
-    contract: "Contract",
-    internship: "Internship",
+  const { t } = useLanguage()
+  
+  const getEmploymentTypeLabel = (type: string) => {
+    const typeMap: Record<string, string> = {
+      full_time: t("jobType.full_time"),
+      part_time: t("jobType.part_time"),
+      contract: t("jobType.contract"),
+      internship: t("jobType.internship"),
+    }
+    return typeMap[type] || type
   }
 
-  const workModeLabels: Record<string, string> = {
-    remote: "Remote",
-    onsite: "Onsite",
-    hybrid: "Hybrid",
+  const getWorkModeLabel = (mode: string) => {
+    const modeMap: Record<string, string> = {
+      remote: t("workMode.remote"),
+      onsite: t("workMode.onsite"),
+      hybrid: t("workMode.hybrid"),
+    }
+    return modeMap[mode] || t("workMode.onsite")
   }
 
-  const employerTypeLabels: Record<string, string> = {
-    COMPANY: "Company",
-    AGENCY: "Agency",
-    CLIENT: "Client",
+  const getEmployerTypeLabel = (type: string) => {
+    const typeMap: Record<string, string> = {
+      COMPANY: t("jobs.company"),
+      AGENCY: t("jobs.agency"),
+      CLIENT: t("jobs.client"),
+    }
+    return typeMap[type] || null
   }
 
   const isRemote = job.location?.toLowerCase().includes("remote") || job.workMode === "remote"
   const timeAgo = formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })
   const salary = formatSalary(job.salaryMin, job.salaryMax)
-  const workMode = workModeLabels[job.workMode || "onsite"] || "Onsite"
-  const employerType = employerTypeLabels[job.employer?.employerType as string] || null
+  const workMode = getWorkModeLabel(job.workMode || "onsite")
+  const employerType = getEmployerTypeLabel(job.employer?.employerType as string)
 
   return (
     <Card className={`hover:shadow-lg transition-shadow ${job.isSponsored ? 'border-2 border-yellow-400 dark:border-yellow-600' : ''}`}>
@@ -67,13 +83,13 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
           {job.isSponsored && (
             <Badge variant="warning" className="w-fit gap-1">
               <Zap className="h-3 w-3" />
-              Sponsored
+              {t("jobs.sponsored")}
             </Badge>
           )}
           {showTrendingBadge && (
             <Badge variant="secondary" className="w-fit gap-1 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300">
               <TrendingUp className="h-3 w-3" />
-              Trending
+              {t("jobs.trending")}
             </Badge>
           )}
         </div>
@@ -127,7 +143,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
 
           <Badge variant="default" className="flex items-center gap-1">
             <Briefcase className="h-3 w-3" />
-            {employmentTypeLabels[job.type] || job.type}
+            {getEmploymentTypeLabel(job.type)}
           </Badge>
 
           {salary && (
@@ -142,9 +158,19 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
           {truncateText(job.description, 120)}
         </p>
 
-        <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
-          <Clock className="h-3 w-3" />
-          <span>Posted {timeAgo}</span>
+        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500">
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            <span>{timeAgo}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Eye className="h-3 w-3" />
+            <span>{job.viewsCount || 0} {t("jobs.views")}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            <span>{job.applicationsCount || 0} {t("jobs.applications")}</span>
+          </div>
         </div>
       </CardContent>
 

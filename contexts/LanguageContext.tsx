@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from "react"
+import { getTranslation, type TranslationKey } from "@/lib/translations"
 
 export type Language = {
   code: string
@@ -27,34 +28,41 @@ export const languages: Language[] = [
 type LanguageContextType = {
   currentLanguage: Language
   setLanguage: (language: Language) => void
-  t: (key: string) => string
+  t: (key: TranslationKey, variables?: Record<string, string | number>) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0])
-
-  useEffect(() => {
-    // Load saved language from localStorage
-    const savedLanguage = localStorage.getItem("preferredLanguage")
-    if (savedLanguage) {
-      const language = languages.find(lang => lang.code === savedLanguage)
-      if (language) {
-        setCurrentLanguage(language)
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
+    // Initialize from localStorage if available (client-side only)
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem("preferredLanguage")
+      if (savedLanguage) {
+        const language = languages.find(lang => lang.code === savedLanguage)
+        if (language) {
+          return language
+        }
       }
     }
+    return languages[0]
+  })
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
   }, [])
 
   const setLanguage = (language: Language) => {
     setCurrentLanguage(language)
-    localStorage.setItem("preferredLanguage", language.code)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("preferredLanguage", language.code)
+    }
   }
 
-  // Simple translation function (can be enhanced with actual translations)
-  const t = (key: string) => {
-    // For now, just return the key - you can add translation dictionaries later
-    return key
+  // Translation function with support for variables
+  const t = (key: TranslationKey, variables?: Record<string, string | number>) => {
+    return getTranslation(currentLanguage.code, key, variables)
   }
 
   return (

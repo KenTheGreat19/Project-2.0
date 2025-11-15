@@ -140,7 +140,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const dbUser = await prisma.user.findUnique({
             where: { email: token.email },
-            select: { id: true, role: true, companyName: true, name: true, image: true },
+            select: { id: true, role: true, companyName: true, name: true, image: true, employerId: true },
           })
           
           if (dbUser) {
@@ -149,6 +149,7 @@ export const authOptions: NextAuthOptions = {
             token.companyName = dbUser.companyName
             token.name = dbUser.name
             token.picture = dbUser.image
+            token.employerId = dbUser.employerId
           }
         } catch (error) {
           console.error("Error fetching user in JWT callback:", error)
@@ -162,6 +163,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).id = token.id;
         (session.user as any).role = token.role || "APPLICANT";
         (session.user as any).companyName = token.companyName;
+        (session.user as any).employerId = token.employerId;
         session.user.name = token.name as string;
         session.user.image = token.picture as string;
       }

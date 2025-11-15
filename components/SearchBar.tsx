@@ -12,10 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 function SearchBarInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { t } = useLanguage()
 
   const [title, setTitle] = useState(searchParams.get("title") || "")
   const [location, setLocation] = useState(searchParams.get("location") || "")
@@ -47,7 +49,7 @@ function SearchBarInner() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Job title or keyword"
+            placeholder={t("search.jobTitle")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -59,7 +61,7 @@ function SearchBarInner() {
         <div className="relative">
           <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Location or 'Remote'"
+            placeholder={t("search.location")}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -72,14 +74,14 @@ function SearchBarInner() {
           <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
           <Select value={type} onValueChange={setType}>
             <SelectTrigger className="pl-10">
-              <SelectValue placeholder="Employment type" />
+              <SelectValue placeholder={t("search.jobType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="full_time">Full Time</SelectItem>
-              <SelectItem value="part_time">Part Time</SelectItem>
-              <SelectItem value="contract">Contract</SelectItem>
-              <SelectItem value="internship">Internship</SelectItem>
+              <SelectItem value="all">{t("search.allTypes")}</SelectItem>
+              <SelectItem value="full_time">{t("search.fullTime")}</SelectItem>
+              <SelectItem value="part_time">{t("search.partTime")}</SelectItem>
+              <SelectItem value="contract">{t("search.contract")}</SelectItem>
+              <SelectItem value="internship">{t("search.internship")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -89,7 +91,7 @@ function SearchBarInner() {
           <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="number"
-            placeholder="Min salary (e.g., 50000)"
+            placeholder={t("search.minSalary")}
             value={minSalary}
             onChange={(e) => setMinSalary(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -104,14 +106,14 @@ function SearchBarInner() {
           className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90"
         >
           <Search className="h-4 w-4 mr-2" />
-          Search Jobs
+          {t("search.searchJobs")}
         </Button>
         <Button
           onClick={handleClear}
           variant="outline"
           className="px-6"
         >
-          Clear
+          {t("search.clearFilters")}
         </Button>
       </div>
     </div>

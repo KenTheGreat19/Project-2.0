@@ -1,6 +1,39 @@
+"use client"
+
 import prisma from "@/lib/prisma"
 import { JobCard } from "@/components/JobCard"
 import { TrendingUp } from "lucide-react"
+import { useLanguage } from "@/contexts/LanguageContext"
+
+export function TrendingJobsClient({ jobs }: { jobs: any[] }) {
+  const { t } = useLanguage()
+
+  if (jobs.length === 0) {
+    return null
+  }
+
+  return (
+    <div>
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <TrendingUp className="h-8 w-8 text-orange-500" />
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {t("jobs.trending")}
+          </h2>
+        </div>
+        <p className="text-gray-600 dark:text-gray-400">
+          {t("jobs.trendingDescription")}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobs.map((job) => (
+          <JobCard key={job.id} job={job} showTrendingBadge />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export async function TrendingJobs() {
   // Fetch trending jobs based on recent engagement and views
@@ -39,25 +72,5 @@ export async function TrendingJobs() {
     return null
   }
 
-  return (
-    <div>
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <TrendingUp className="h-8 w-8 text-orange-500" />
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Trending Jobs
-          </h2>
-        </div>
-        <p className="text-gray-600 dark:text-gray-400">
-          Most popular job postings this week based on engagement and views
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trendingJobs.map((job) => (
-          <JobCard key={job.id} job={job} showTrendingBadge />
-        ))}
-      </div>
-    </div>
-  )
+  return <TrendingJobsClient jobs={trendingJobs} />
 }

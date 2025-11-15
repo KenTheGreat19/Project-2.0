@@ -18,8 +18,18 @@ import {
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-export function EmployerProfileSettings() {
-  const [companyName, setCompanyName] = useState("")
+interface EmployerProfileSettingsProps {
+  user: {
+    id: string
+    employerId?: string | null
+    name?: string | null
+    email?: string | null
+    companyName?: string | null
+  }
+}
+
+export function EmployerProfileSettings({ user }: EmployerProfileSettingsProps) {
+  const [companyName, setCompanyName] = useState(user.companyName || "")
   const [companyDescription, setCompanyDescription] = useState("")
   const [website, setWebsite] = useState("")
 
@@ -30,8 +40,8 @@ export function EmployerProfileSettings() {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle className="text-2xl">No account name</CardTitle>
-              <CardDescription className="mt-1">khennethcobyglegaspi@gmail.com</CardDescription>
+              <CardTitle className="text-2xl">{user.companyName || user.name || "No account name"}</CardTitle>
+              <CardDescription className="mt-1">{user.email || "-"}</CardDescription>
             </div>
           </div>
         </CardHeader>

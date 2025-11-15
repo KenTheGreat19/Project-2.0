@@ -23,7 +23,7 @@ const jobFitCriteriaSchema = z.object({
 
 // GET - Fetch job fit criteria
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
   try {

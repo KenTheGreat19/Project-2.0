@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { MapPin, Briefcase, DollarSign, Building2, Calendar } from "lucide-react"
+import { MapPin, Briefcase, DollarSign, Building2, Calendar, Eye, Users } from "lucide-react"
 import prisma from "@/lib/prisma"
 import { ApplyButton } from "@/components/ApplyButton"
 import { Badge } from "@/components/ui/badge"
@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { PublicComments } from "@/components/PublicComments"
 import { EmployerPublicReviews } from "@/components/EmployerPublicReviews"
 import { JobFitGradingWidget } from "@/components/JobFitGradingWidget"
+import { ViewTracker } from "@/components/ViewTracker"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary } from "@/lib/utils"
 
@@ -82,6 +83,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+      <ViewTracker jobId={job.id} />
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -139,6 +141,12 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-4">
                   <Calendar className="h-4 w-4" />
                   <span>Posted {timeAgo}</span>
+                  <span className="mx-2">•</span>
+                  <Eye className="h-4 w-4" />
+                  <span>{job.viewsCount || 0} views</span>
+                  <span className="mx-2">•</span>
+                  <Users className="h-4 w-4" />
+                  <span>{job.applicationsCount || 0} applied</span>
                 </div>
               </CardHeader>
             </Card>
