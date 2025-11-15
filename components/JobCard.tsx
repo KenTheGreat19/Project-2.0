@@ -5,8 +5,6 @@ import { MapPin, Briefcase, Clock, DollarSign, Star, CheckCircle, Zap, TrendingU
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { SaveJobButton } from "@/components/SaveJobButton"
-import { LikeButton } from "@/components/LikeButton"
 import { formatDistanceToNow } from "date-fns"
 import { formatSalary, truncateText } from "@/lib/utils"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -178,8 +176,6 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
         <Button asChild className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90">
           <Link href={`/jobs/${job.id}`}>View Details</Link>
         </Button>
-        <LikeButton jobId={job.id} initialLikesCount={job.likesCount || 0} />
-        <SaveJobButton jobId={job.id} variant="outline" />
       </CardFooter>
     </Card>
   )

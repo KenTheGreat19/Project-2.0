@@ -45,8 +45,6 @@ export async function POST(request: NextRequest) {
         employerType: data.employerType,
         contactEmail: data.contactEmail,
         contactPhone: data.contactPhone,
-        // For COMPANY employers, require verification
-        verificationStatus: data.role === "EMPLOYER" && data.employerType === "COMPANY" ? "PENDING" : "NOT_SUBMITTED",
       },
     })
 
