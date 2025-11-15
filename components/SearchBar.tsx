@@ -43,37 +43,37 @@ function SearchBarInner() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 space-y-4">
+    <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Job Title */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
           <Input
             placeholder={t("search.jobTitle")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10"
+            className="pl-10 h-12 rounded-xl border-2 focus:border-blue-500 transition-all"
           />
         </div>
 
         {/* Location */}
         <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
           <Input
             placeholder={t("search.location")}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10"
+            className="pl-10 h-12 rounded-xl border-2 focus:border-blue-500 transition-all"
           />
         </div>
 
         {/* Employment Type */}
         <div className="relative">
-          <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
+          <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500 z-10" />
           <Select value={type} onValueChange={setType}>
-            <SelectTrigger className="pl-10">
+            <SelectTrigger className="pl-10 h-12 rounded-xl border-2">
               <SelectValue placeholder={t("search.jobType")} />
             </SelectTrigger>
             <SelectContent>
@@ -88,30 +88,30 @@ function SearchBarInner() {
 
         {/* Minimum Salary */}
         <div className="relative">
-          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
           <Input
             type="number"
             placeholder={t("search.minSalary")}
             value={minSalary}
             onChange={(e) => setMinSalary(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10"
+            className="pl-10 h-12 rounded-xl border-2 focus:border-blue-500 transition-all"
           />
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <Button
           onClick={handleSearch}
-          className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90"
+          className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all h-12 rounded-xl text-base font-semibold"
         >
-          <Search className="h-4 w-4 mr-2" />
+          <Search className="h-5 w-5 mr-2" />
           {t("search.searchJobs")}
         </Button>
         <Button
           onClick={handleClear}
           variant="outline"
-          className="px-6"
+          className="px-8 h-12 rounded-xl border-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
         >
           {t("search.clearFilters")}
         </Button>

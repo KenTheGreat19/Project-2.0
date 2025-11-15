@@ -66,6 +66,7 @@ interface JobMapProps {
     employerType?: string | null
   }>
   onJobClick?: (jobId: string) => void
+  height?: number
 }
 
 // Geocoding with detailed location breakdown
@@ -505,6 +506,7 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
               )}
 
               {/* Job markers with clustering */}
+              {/* @ts-ignore */}
               <MarkerClusterGroup>
                 {filteredLocations.map((job, index) => {
                   const typeColor = job.employerType === 'COMPANY' ? '#3b82f6' : 

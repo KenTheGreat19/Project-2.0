@@ -77,17 +77,17 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
   const employerType = getEmployerTypeLabel(job.employer?.employerType as string)
 
   return (
-    <Card className={`hover:shadow-lg transition-shadow ${job.isSponsored ? 'border-2 border-yellow-400 dark:border-yellow-600' : ''}`}>
-      <CardHeader className="pb-3">
+    <Card className={`hover-lift rounded-xl overflow-hidden border-2 ${job.isSponsored ? 'border-yellow-400 dark:border-yellow-600 shadow-xl' : 'border-transparent'}`}>
+      <CardHeader className="pb-4 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
         <div className="flex gap-2 flex-wrap">
           {job.isSponsored && (
-            <Badge variant="warning" className="w-fit gap-1">
+            <Badge variant="warning" className="w-fit gap-1 shadow-md">
               <Zap className="h-3 w-3" />
               {t("jobs.sponsored")}
             </Badge>
           )}
           {showTrendingBadge && (
-            <Badge variant="secondary" className="w-fit gap-1 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300">
+            <Badge variant="secondary" className="w-fit gap-1 bg-gradient-to-r from-orange-400 to-red-500 text-white shadow-md">
               <TrendingUp className="h-3 w-3" />
               {t("jobs.trending")}
             </Badge>
@@ -96,7 +96,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
         {(job.isSponsored || showTrendingBadge) && <div className="h-2" />}
         <Link 
           href={`/jobs/${job.id}`}
-          className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#0A66C2] dark:hover:text-[#0A66C2] transition-colors"
+          className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
         >
           {job.title}
         </Link>
@@ -127,34 +127,34 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-4 pt-4">
         <div className="flex flex-wrap gap-2">
-          <Badge variant={isRemote ? "success" : "secondary"} className="flex items-center gap-1">
+          <Badge variant={isRemote ? "success" : "secondary"} className="flex items-center gap-1 shadow-sm">
             <MapPin className="h-3 w-3" />
             {workMode}
           </Badge>
 
           {job.location && (
-            <Badge variant="secondary" className="flex items-center gap-1">
+            <Badge variant="secondary" className="flex items-center gap-1 shadow-sm">
               <MapPin className="h-3 w-3" />
               {job.location}
             </Badge>
           )}
 
-          <Badge variant="default" className="flex items-center gap-1">
+          <Badge variant="default" className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-cyan-600 shadow-sm">
             <Briefcase className="h-3 w-3" />
             {getEmploymentTypeLabel(job.type)}
           </Badge>
 
           {salary && (
-            <Badge variant="secondary" className="flex items-center gap-1">
+            <Badge variant="secondary" className="flex items-center gap-1 shadow-sm bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
               <DollarSign className="h-3 w-3" />
               {salary}
             </Badge>
           )}
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
           {truncateText(job.description, 120)}
         </p>
 
@@ -174,8 +174,8 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-2">
-        <Button asChild className="flex-1 bg-[#0A66C2] hover:bg-[#0A66C2]/90">
+      <CardFooter className="flex gap-2 pt-4 bg-gray-50 dark:bg-gray-800/50">
+        <Button asChild className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-md hover:shadow-lg transition-all">
           <Link href={`/jobs/${job.id}`}>View Details</Link>
         </Button>
         <LikeButton jobId={job.id} initialLikesCount={job.likesCount || 0} />

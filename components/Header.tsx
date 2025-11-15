@@ -29,12 +29,12 @@ export function Header() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+    <header className="sticky top-0 z-50 w-full glass-effect border-b border-gray-200/50 dark:border-gray-800/50 shadow-lg">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="apply n hire logo" width={44} height={44} />
-          <span className="text-[1.25rem] font-bold text-[#0A66C2] hover:opacity-80 transition-opacity" suppressHydrationWarning>
+        <Link href="/" className="flex items-center gap-3 group">
+          <Image src="/logo.png" alt="apply n hire logo" width={44} height={44} className="transition-transform group-hover:scale-110" />
+          <span className="text-[1.25rem] font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity" suppressHydrationWarning>
             {mounted ? t("header.logo") : "apply n hire"}
           </span>
         </Link>
@@ -86,13 +86,13 @@ export function Header() {
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all hover:scale-110"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5 text-yellow-500" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 text-blue-600" />
               )}
             </button>
           )}
@@ -142,14 +142,14 @@ export function Header() {
               <Button
                 variant="outline"
                 asChild
-                className="border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all"
               >
                 <Link href="/auth/employer">{t("header.forEmployers")}</Link>
               </Button>
 
               <Button
                 asChild
-                className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all"
               >
                 <Link href="/auth/applicant">{t("header.signIn")}</Link>
               </Button>
@@ -275,7 +275,7 @@ export function Header() {
               <Button
                 variant="outline"
                 asChild
-                className="w-full border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white"
+                className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Link href="/auth/employer">{t("header.forEmployers")}</Link>
@@ -283,7 +283,7 @@ export function Header() {
 
               <Button
                 asChild
-                className="w-full bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 shadow-lg transition-all"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Link href="/auth/applicant">{t("header.signIn")}</Link>

@@ -47,18 +47,19 @@ export async function JobCategories() {
 
   // Filter out categories with 0 jobs
   const categories = categoryCounts.filter(cat => cat.count > 0)
+  
   return (
     <div>
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      <div className="mb-10 text-center">
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-3">
           Browse Jobs by Category
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-gray-600 dark:text-gray-400">
           Explore thousands of job opportunities across various industries
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {categories.map((category) => {
           const Icon = category.icon
           return (
@@ -67,17 +68,17 @@ export async function JobCategories() {
               href={`/?category=${encodeURIComponent(category.name)}`}
               className="group"
             >
-              <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer border-2 hover:border-primary">
+              <Card className="hover-lift rounded-2xl overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all duration-300">
                 <CardContent className="p-6">
-                  <div className="flex flex-col items-center text-center space-y-3">
-                    <div className={`${category.color} p-4 rounded-full text-white group-hover:scale-110 transition-transform`}>
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className={`${category.color} p-5 rounded-2xl text-white group-hover:scale-110 transition-transform shadow-lg`}>
                       <Icon className="h-8 w-8" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                      <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors text-lg">
                         {category.name}
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">
                         {category.count} {category.count === 1 ? 'job' : 'jobs'}
                       </p>
                     </div>
