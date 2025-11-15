@@ -22,7 +22,6 @@ import {
   Grid3x3,
   LayoutDashboard,
   CreditCard,
-  FileText,
   UserCog,
   HelpCircle,
   Layers,

@@ -47,7 +47,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
     return languages[0]
   })
-  const [mounted, setMounted] = useState(false)
+  const [_mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)

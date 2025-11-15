@@ -50,20 +50,13 @@ export async function TrendingJobs() {
     include: {
       employer: {
         select: {
-          averageRating: true,
-          responseRate: true,
-          completedHires: true,
-          isVerified: true,
-          totalReviews: true,
-          hasVerifiedBadge: true,
           employerType: true,
         },
       },
     },
     orderBy: [
-      { engagementScore: "desc" },
       { viewsCount: "desc" },
-      { likesCount: "desc" },
+      { createdAt: "desc" },
     ],
     take: 6,
   })
