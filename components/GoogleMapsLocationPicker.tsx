@@ -196,7 +196,7 @@ export function GoogleMapsLocationPicker({
         )}
         <Button
           type="button"
-          variant="outline"
+          variant="secondary"
           onClick={getCurrentLocation}
           disabled={isLoadingLocation}
         >

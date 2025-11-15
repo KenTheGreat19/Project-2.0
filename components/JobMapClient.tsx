@@ -73,7 +73,7 @@ export function JobMapClient({ jobs }: JobMapClientProps) {
       </div>
 
       {viewMode === "map" ? (
-        <JobMap jobs={jobs} onJobClick={handleJobClick} height={500} />
+        <JobMap jobs={jobs} onJobClick={handleJobClick} />
       ) : (
         <div className="text-center py-8 text-muted-foreground">
           <p>Switch to Map View to see job locations</p>

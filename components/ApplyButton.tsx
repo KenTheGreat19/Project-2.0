@@ -101,7 +101,7 @@ export function ApplyButton({ jobId, applyUrl, jobTitle, acceptApplicationsHere 
               
               <Button
                 onClick={handleExternalApply}
-                variant="outline"
+                variant="secondary"
                 className="w-full border-2 border-[#10B981] text-[#10B981] hover:bg-[#10B981]/10 text-lg py-6 font-semibold"
                 size="lg"
               >
@@ -140,7 +140,7 @@ export function ApplyButton({ jobId, applyUrl, jobTitle, acceptApplicationsHere 
 
             <DialogFooter>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() => setShowDialog(false)}
                 disabled={isApplying}
               >

@@ -22,7 +22,6 @@ import {
   Grid3x3,
   LayoutDashboard,
   CreditCard,
-  FileText,
   UserCog,
   HelpCircle,
   Layers,
@@ -382,7 +381,7 @@ export function EmployerSidebar({
           <div className="grid gap-4 py-4">
             <Link href="/employer/jobs/new">
               <Button
-                variant="outline"
+                variant="secondary"
                 className="w-full h-auto py-6 justify-start gap-4"
                 onClick={() => setShowCreateDialog(false)}
               >
@@ -401,7 +400,7 @@ export function EmployerSidebar({
 
             <Link href="/employer/users/new">
               <Button
-                variant="outline"
+                variant="secondary"
                 className="w-full h-auto py-6 justify-start gap-4"
                 onClick={() => setShowCreateDialog(false)}
               >

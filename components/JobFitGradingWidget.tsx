@@ -150,7 +150,7 @@ export function JobFitGradingWidget({ jobId }: Props) {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="w-full border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950">
+            <Button asChild variant="secondary" className="w-full border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950">
               <Link href="/auth/applicant/signup">
                 Create Free Account
               </Link>

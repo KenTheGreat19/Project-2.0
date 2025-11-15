@@ -143,7 +143,7 @@ export function GoogleJobMap({ jobs, onJobClick }: GoogleJobMapProps) {
         </div>
         <Button
           onClick={getUserLocation}
-          variant="outline"
+          variant="secondary"
           size="sm"
           disabled={geolocating}
         >

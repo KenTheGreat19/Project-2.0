@@ -108,7 +108,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
             )}
           </p>
           {employerType && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="secondary" className="text-xs">
               {employerType}
             </Badge>
           )}
@@ -135,7 +135,7 @@ export function JobCard({ job, showTrendingBadge }: JobCardProps) {
           </Badge>
 
           {job.location && (
-            <Badge variant="outline" className="flex items-center gap-1">
+            <Badge variant="secondary" className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
               {job.location}
             </Badge>

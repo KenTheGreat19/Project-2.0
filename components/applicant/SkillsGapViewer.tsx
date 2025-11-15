@@ -181,7 +181,7 @@ export function SkillsGapViewer({ jobId, jobTitle }: Props) {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.matchingSkills.map((skill, i) => (
-                  <Badge key={i} variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <Badge key={i} variant="secondary" className="bg-green-50 text-green-700 border-green-200">
                     {skill}
                   </Badge>
                 ))}
@@ -202,7 +202,7 @@ export function SkillsGapViewer({ jobId, jobTitle }: Props) {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.weakSkills.map((skill, i) => (
-                  <Badge key={i} variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                  <Badge key={i} variant="secondary" className="bg-yellow-50 text-yellow-700 border-yellow-200">
                     {skill}
                   </Badge>
                 ))}
@@ -223,7 +223,7 @@ export function SkillsGapViewer({ jobId, jobTitle }: Props) {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.missingSkills.map((skill, i) => (
-                  <Badge key={i} variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                  <Badge key={i} variant="secondary" className="bg-red-50 text-red-700 border-red-200">
                     {skill}
                   </Badge>
                 ))}
@@ -316,7 +316,7 @@ export function SkillsGapViewer({ jobId, jobTitle }: Props) {
       )}
 
       {/* Refresh Button */}
-      <Button onClick={fetchAnalysis} disabled={loading} variant="outline" className="w-full">
+      <Button onClick={fetchAnalysis} disabled={loading} variant="secondary" className="w-full">
         {loading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

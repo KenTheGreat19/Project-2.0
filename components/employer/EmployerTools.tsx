@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { 
   Settings, 
   Zap, 
@@ -260,7 +259,7 @@ export function EmployerTools() {
                           <div className="text-sm text-muted-foreground">ATS Platform</div>
                         </div>
                       </div>
-                        <Button variant="outline" size="sm" asChild>
+                        <Button variant="secondary" size="sm" asChild>
                           <Link href={`/employer/tools/integrations?ats=${encodeURIComponent(ats)}`}>
                             Connect
                           </Link>

@@ -327,7 +327,7 @@ export function JobTagsManager() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+            <Button variant="secondary" onClick={() => setIsCreateOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleCreateTag} disabled={creating}>

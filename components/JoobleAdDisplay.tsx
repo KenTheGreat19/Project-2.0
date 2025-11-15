@@ -147,7 +147,7 @@ export default function JoobleAdDisplay({
               
               <div className="flex flex-wrap gap-2">
                 {ad.type && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="secondary" className="text-xs">
                     {ad.type}
                   </Badge>
                 )}

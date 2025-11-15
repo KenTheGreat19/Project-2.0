@@ -304,7 +304,7 @@ export function JobAlertsManager() {
                   </>
                 )}
               </Button>
-              <Button onClick={resetForm} variant="outline">
+              <Button onClick={resetForm} variant="secondary">
                 Cancel
               </Button>
             </div>
@@ -326,12 +326,12 @@ export function JobAlertsManager() {
                     </CardTitle>
                     <CardDescription>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        <Badge variant="outline">{alert.frequency}</Badge>
+                        <Badge variant="secondary">{alert.frequency}</Badge>
                         {alert.minSalary && (
-                          <Badge variant="outline">Min ${alert.minSalary.toLocaleString()}</Badge>
+                          <Badge variant="secondary">Min ${alert.minSalary.toLocaleString()}</Badge>
                         )}
                         {alert.experienceLevel && (
-                          <Badge variant="outline">{alert.experienceLevel}</Badge>
+                          <Badge variant="secondary">{alert.experienceLevel}</Badge>
                         )}
                       </div>
                     </CardDescription>
