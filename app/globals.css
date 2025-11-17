@@ -23,7 +23,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 210 98% 41%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -54,6 +54,24 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 text-foreground;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg;
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent;
+  }
+  
+  .card-modern {
+    @apply rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300;
   }
 }

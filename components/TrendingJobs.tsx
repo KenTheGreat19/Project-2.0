@@ -14,14 +14,14 @@ export function TrendingJobsClient({ jobs }: { jobs: any[] }) {
 
   return (
     <div>
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <TrendingUp className="h-8 w-8 text-orange-500" />
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="mb-10 text-center">
+        <div className="inline-flex items-center gap-3 mb-4 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full shadow-lg">
+          <TrendingUp className="h-6 w-6" />
+          <h2 className="text-2xl font-bold">
             {t("jobs.trending")}
           </h2>
         </div>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           {t("jobs.trendingDescription")}
         </p>
       </div>

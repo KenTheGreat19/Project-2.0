@@ -29,10 +29,6 @@ const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
 )
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
-  { ssr: false }
-)
 
 // @ts-ignore
 const MarkerClusterGroup = dynamic(
@@ -58,15 +54,6 @@ interface JobLocation {
   country?: string
 }
 
-interface LocationCluster {
-  lat: number
-  lng: number
-  count: number
-  jobs: JobLocation[]
-  label: string
-  level: 'country' | 'state' | 'city' | 'street'
-}
-
 interface JobMapProps {
   jobs: Array<{
     id: string
@@ -79,6 +66,7 @@ interface JobMapProps {
     employerType?: string | null
   }>
   onJobClick?: (jobId: string) => void
+  height?: number
 }
 
 // Geocoding with detailed location breakdown
@@ -518,6 +506,7 @@ export function JobMap({ jobs, onJobClick }: JobMapProps) {
               )}
 
               {/* Job markers with clustering */}
+              {/* @ts-ignore */}
               <MarkerClusterGroup>
                 {filteredLocations.map((job, index) => {
                   const typeColor = job.employerType === 'COMPANY' ? '#3b82f6' : 
